@@ -78,8 +78,8 @@ var run = function() {
             since: since
         };
 
-        if (data.user.blog !== undefined) {
-            view.blog = addHttp + data.user.blog;
+        if (data.user.blog !== undefined && data.user.blog !== null) {
+            view.blog =  addHttp + data.user.blog;
         }
 
         $.ajax({
