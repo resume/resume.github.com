@@ -93,6 +93,7 @@ var run = function() {
             if (arr[i].fork !== false) {
                 return;
             }
+
             var popularity = arr[i].watchers + arr[i].forks;
             sorted.push({position: i, popularity: popularity, info: arr[i]});
         });

@@ -116,4 +116,12 @@ button#gen:hover {
     cursor: pointer;
 }
 
+.yui-gb ul  {
+    width: 80%;
+}
 
+.yui-gb {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
