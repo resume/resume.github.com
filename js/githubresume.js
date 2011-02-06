@@ -137,7 +137,7 @@ var run = function() {
     });
 };
 
-<script type="text/javascript">
+
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-21222559-1']);
@@ -149,6 +149,6 @@ var run = function() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
-</script>
+
 
 $(window).bind('error', error);
