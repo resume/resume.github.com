@@ -60,11 +60,13 @@ var run = function() {
         var since = new Date(data.user.created_at);
         since = since.getFullYear();
 
+
+        var addHttp = data.user.blog.indexOf('http') < 0 ? 'http://' : '';
         var view = {
             name: data.user.name,
             email: data.user.email,
             created_at: data.user.created_at,
-            blog: data.user.blog,
+            blog: addHttp + data.user.blog,
             location: data.user.location,
             repos: data.user.public_repo_count,
             plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
