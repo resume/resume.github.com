@@ -67,8 +67,13 @@ var run = function() {
             }
         }
 
+        var name = 'Papa Bear';
+        if (data.user.name !== null && data.user.name !== undefined) {
+            name = data.user.name;
+        }
+
         var view = {
-            name: data.user.name,
+            name: name, 
             email: data.user.email,
             created_at: data.user.created_at,
             location: data.user.location,
@@ -89,6 +94,7 @@ var run = function() {
                 var template = data;
                 var html = Mustache.to_html(template, view);
                 $('#resume').html(html);
+                document.title = name + "'s Résumé";
             }
         });
     });
