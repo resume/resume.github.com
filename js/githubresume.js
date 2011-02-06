@@ -67,7 +67,7 @@ var run = function() {
             }
         }
 
-        var name = 'Papa Bear';
+        var name = username;
         if (data.user.name !== null && data.user.name !== undefined) {
             name = data.user.name;
         }
