@@ -225,6 +225,11 @@
         return this;
     };
 
+    gh.user.prototype.orgs = function (callback, context) {
+        gh.org.forUser(this.username, callback, context);
+        return this;
+    };
+
     // Make this user fork the repo that lives at
     // http://github.com/user/repo. You must be authenticated as this user for
     // this to succeed.
@@ -268,6 +273,15 @@
             return new gh.repo(user, repo);
         }
         this.repo = repo;
+        this.user = user;
+    };
+
+    gh.org = function(user, org) {
+        if (!(this instanceof gh.org)) {
+            return new gh.org(user, org);
+        }
+
+        this.org = org;
         this.user = user;
     };
 
@@ -400,6 +414,11 @@
     // Get all the repos that are owned by `user`.
     gh.repo.forUser = function (user, callback, context) {
         jsonp("repos/show/" + user, callback, context);
+        return this;
+    };
+
+    gh.org.forUser = function (user, callback, context) {
+        jsonp("user/show/" + user + "/organizations", callback, context);
         return this;
     };
 

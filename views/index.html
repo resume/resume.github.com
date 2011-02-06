@@ -2,25 +2,26 @@
    <div id="hd" role="banner"><h1>My Github Resume</h1></div>
    <div id="bd" role="main">
     <div class="yui-g">
-        <h2>Welcome!</h2>
-        <p>
+        <p class="enlarge-medium">
             As a software startup owner I really enjoy when people send us their
-            resumes and they include their github account so we can see tangible work they have done. 
+            resum&eacute;s and they include their github account so we can see tangible work they have done. 
         </p>
         <p><br /></p>
-        <p>
+        <p class="enlarge-medium">
             After a <a href="https://twitter.com/#!/jeresig/status/33968704983138304">tweet by John Resig</a>
-            I imagined that it may be nice for people to be able to generate their <a href="https://github.com" title="Github">Github</a> resumes.
+            I imagined that it may be nice for people to be able to generate their <a href="https://github.com" title="Github">Github</a> resum&eacute;s.
         </p>
-        <p><br /></p>
+        <p><br /><br /></p>
+
         <p>
             <input  id="username" type="text" value="Enter your github username and click on generate" />
             <button type="button" id="gen">Generate</button>
         </p>
-    </div>
 
     </div>
+
     <div class="yui-g">
+        <p><br /><br /></p>
         <h2>See some popular users</h2>
         <div class="yui-gb">
             <ul>
@@ -48,14 +49,14 @@
         <div class="yui-main">
             <br /><br />
             <h2>Notes, Information and Future features</h2>
-            <p>
+            <p class="enlarge-medium"><br />
             This is the first version, please keep in mind that it only fetches your first 30 repositories for now. I am planning on adding
             things as such as your most committed forks, most committed repositories and make the "My Popular Repositories" be built from
             your complete list of repositories. The issue right now is say you have 37 repositories, this will only retrieve the first
             30 repositories that were created. I'll put a note here when this is fixed or feel free to <a href="https://github.com/resume/resume.github.com">fork the page</a>,
             make changes and send them back :-)
             </p>
-            <p> 
+            <p class="enlarge-medium">
             <br />
             Another popular feature people are asking a lot is listing of the organizations. <strong>This is the next feature to be added</strong>.
             <br /><br />
@@ -64,7 +65,7 @@
 
     </div>
 
-   <div id="ft" role="contentinfo"><p>Brought to you by the brilliant mind of <a href="http://twitter.com/davidcoallier">@davidcoallier</a> &lt;/modesty&gt;</p></div>
+   <div id="ft" role="contentinfo"><p>Brought to you by the brilliant mind of <a href="http://twitter.com/davidcoallier">@davidcoallier</a> &lt;/modesty&gt; &mdash; Resume Template from <a href="http://thingsthatarebrown.com/blog/2009/05/sample-resume-template/">Things That Are Brown</a></p></div>
 </div>
 
 <script type="text/javascript">
@@ -73,7 +74,7 @@ $(document).ready(function() {
         $(this).val('');
     });
 
-    $(document).keyup(function(e) {
+    $(window).keyup(function(e) {
         if (e.keyCode == 13) {
             var genUser = $('#username').val();
             document.location.href = "/?" + genUser;

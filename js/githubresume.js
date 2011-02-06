@@ -60,19 +60,27 @@ var run = function() {
         var since = new Date(data.user.created_at);
         since = since.getFullYear();
 
+        var addHttp = '';
+        if (data.user.blog !== undefined && data.user.blog !== null) {
+            if (data.user.blog.indexOf('http') < 0) {
+                addHttp = 'http://';
+            }
+        }
 
-        var addHttp = data.user.blog.indexOf('http') < 0 ? 'http://' : '';
         var view = {
             name: data.user.name,
             email: data.user.email,
             created_at: data.user.created_at,
-            blog: addHttp + data.user.blog,
             location: data.user.location,
             repos: data.user.public_repo_count,
             plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
             username: username,
             since: since
         };
+
+        if (data.user.blog !== undefined) {
+            view.blog = addHttp + data.user.blog;
+        }
 
         $.ajax({
             url: 'views/resume.html',
@@ -112,32 +120,92 @@ var run = function() {
             success: function(response) {
                 var now = new Date().getFullYear();
 
-                sorted.forEach(function(elm, index, arr) {
-                    if (itemCount >= maxItems) {
-                        return;
-                    }
+                if (sorted.length > 0) {
+                    $('#jobs').html('');
+                    itemCount = 0;
+                    sorted.forEach(function(elm, index, arr) {
+                        if (itemCount >= maxItems) {
+                            return;
+                        }
     
-                    var since = new Date(arr[index].info.created_at);
-                    since = since.getFullYear();
-                    var view = {
-                        name: arr[index].info.name,
-                        since: since,
-                        now: now,
-                        description: arr[index].info.description,
-                        username: username,
-                        watchers: arr[index].info.watchers,
-                        forks: arr[index].info.forks
-                    };
+                        var since = new Date(arr[index].info.created_at);
+                        since = since.getFullYear();
+
+                        var view = {
+                            name: arr[index].info.name,
+                            since: since,
+                            now: now,
+                            description: arr[index].info.description,
+                            username: username,
+                            watchers: arr[index].info.watchers,
+                            forks: arr[index].info.forks
+                        };
+   
+                        if (itemCount == sorted.length - 1 || itemCount == maxItems-1) {
+                            view.last = 'last';
+                        }
+
+                        var template = response;
+                        var html = Mustache.to_html(template, view);
     
-                    var template = response;
-                    var html = Mustache.to_html(template, view);
-    
-                    $('#jobs').append($(html));
-                    ++itemCount;
-                });
+
+                        $('#jobs').append($(html));
+                        ++itemCount;
+                    });
+                } else {
+                    $('#jobs').append('<p class="enlarge">I do not have any public repository. Sorry.</p>');
+                }
             }
         });
     });
+
+    gh_user.orgs(function(data) {
+        var orgs = data.organizations;
+
+        var sorted = [];
+
+        orgs.forEach(function(elm, i, arr) {
+            if (arr[i].name === undefined) {
+                return;
+            }
+            sorted.push({position: i, info: arr[i]});
+        });
+
+        $.ajax({
+            url: 'views/org.html',
+            dataType: 'html',
+            success: function(response) {
+                var now = new Date().getFullYear();
+
+                if (sorted.length > 0) {
+                    $('#orgs').html('');
+                    sorted.forEach(function(elm, index, arr) {
+                        if (itemCount >= maxItems) {
+                            return;
+                        }
+                        var view = {
+                            name: arr[index].info.name,
+                            login: arr[index].info.login,
+                            now: now
+                        };
+    
+                        if (itemCount == sorted.length - 1 || itemCount == maxItems) {
+                            view.last = 'last';
+                        }
+                        var template = response;
+                        var html = Mustache.to_html(template, view);
+    
+                        $('#orgs').append($(html));
+                        ++itemCount;
+                    });
+                } else {
+                    console.log(sorted);
+                    $('#organizations').remove();
+                }
+            }
+        });
+    });
+
 };
 
 
