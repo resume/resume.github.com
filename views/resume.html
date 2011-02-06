@@ -1,0 +1,76 @@
+<div id="doc2" class="yui-t7">
+	<div id="inner">
+	
+		<div id="hd">
+			<div class="yui-gc">
+				<div class="yui-u first">
+					<h1>{{name}}</h1>
+					<h2>Passionate github user</h2>
+				</div>
+
+				<div class="yui-u">
+					<div class="contact-info">
+						<h3><a href="mailto:{{email}}">{{email}}</a></h3>
+					</div><!--// .contact-info -->
+				</div>
+			</div><!--// .yui-gc -->
+		</div><!--// hd -->
+
+		<div id="bd">
+			<div id="yui-main">
+				<div class="yui-b">
+
+					<div class="yui-gf">
+						<div class="yui-u first">
+							<h2>Github Profile</h2>
+						</div>
+						<div class="yui-u">
+							<p class="enlarge">
+                                I'm a developer
+                                {{#location}}
+                                based in {{location}} 
+                                {{/location}} 
+                                with {{repos}} public {{plural}}. I've been using github.com since {{since}}
+                                {{#blog}} 
+                                and sometimes I blog at <a href="{{blog}}" title="my blog">{{blog}}</a>
+                                {{/blog}}.
+							</p>
+						</div>
+					</div><!--// .yui-gf -->
+
+
+					<div class="yui-gf">	
+						<div class="yui-u first">
+							<h2>My Popular Repositories</h2>
+						</div><!--// .yui-u -->
+
+						<div class="yui-u" id="jobs">
+
+						</div><!--// .yui-u -->
+					</div><!--// .yui-gf -->
+
+					<div class="yui-gf last">
+						<div class="yui-u first">
+							<h2>About This Resume</h2>
+						</div>
+						<div class="yui-u">
+							<p class="enlarge">
+                                This resume is generated automatically using information from my github account. The repositories are
+                                ordered by popularity based on a very simple popularity heuristic that defines the popularity of a repository
+                                by it's sum of watchers and forks. Do not hesitate to visit <a href="https://github.com/{{{username}}}" title="My Github page">my github page</a>
+                                for more information about my repositories and work.
+							</p>
+						</div>
+					</div><!--// .yui-gf -->
+				</div><!--// .yui-b -->
+			</div><!--// yui-main -->
+		</div><!--// bd -->
+
+		<div id="ft">
+			<p>{{name}} &mdash; <a href="mailto:{{email}}">{{email}}</a> &mdash; <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
+		</div><!--// footer -->
+
+	</div><!-- // inner -->
+
+
+</div><!--// doc -->
