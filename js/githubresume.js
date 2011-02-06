@@ -153,6 +153,7 @@ var run = function() {
                         ++itemCount;
                     });
                 } else {
+                    $('#jobs').html('');
                     $('#jobs').append('<p class="enlarge">I do not have any public repository. Sorry.</p>');
                 }
             }
@@ -199,7 +200,6 @@ var run = function() {
                         ++itemCount;
                     });
                 } else {
-                    console.log(sorted);
                     $('#organizations').remove();
                 }
             }
