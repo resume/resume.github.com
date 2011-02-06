@@ -70,9 +70,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('input#username').live('click', function() {
-        $(this).val('');
-    });
+    $('input#username').focus();
+    $('input#username').select();
 
     $(window).keyup(function(e) {
         if (e.keyCode == 13) {
