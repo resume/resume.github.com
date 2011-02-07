@@ -4,12 +4,17 @@
 		<div id="hd">
 			<div class="yui-gc">
 				<div class="yui-u first">
-					<h1>{{name}}</h1>
-					<h2>Passionate github user</h2>
+					<hgroup>
+						<h1>{{name}}</h1>
+						<h2>Passionate github user</h2>
+					</hgroup>
 				</div>
 
 				<div class="yui-u">
 					<div class="contact-info">
+						{{#gravatar_id}}
+						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt=""/>
+						{{/gravatar_id}}
 						<h3><a href="mailto:{{email}}">{{email}}</a></h3>
 					</div><!--// .contact-info -->
 				</div>
@@ -30,7 +35,8 @@
                                 {{#location}}
                                 based in {{location}} 
                                 {{/location}} 
-                                with {{repos}} public {{plural}}. I've been using github.com since {{since}}
+                                with <a href="https://github.com/{{{username}}}">{{repos}} public {{plural}}</a>. 
+                                I've been using github.com since {{since}}
                                 {{#blog}} 
                                 and sometimes I blog at <a href="" id="myblog" title="my blog">{{blog}}</a>
                                 {{/blog}}

@@ -42,7 +42,8 @@ strong { font-weight: bold; }
 li { line-height: 24px; border-bottom: 1px solid #ccc; }
 p.enlarge { font-size: 144%; padding-right: 6.5em; line-height: 24px; }
 p.enlarge span { color: #000 }
-.contact-info { margin-top: 7px; }
+.contact-info { margin-top: 7px; text-align: right; font-size: 12px;}
+.contact-info img {float: right; border: 1px solid #ccc; width: 150px; height: 150px; margin: -24px 0 14px;}
 .first h2 { font-style: italic; }
 .last { border-bottom: 0 }
 

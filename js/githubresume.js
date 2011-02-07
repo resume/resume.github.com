@@ -51,7 +51,7 @@ var run = function() {
 
     var gh_user = gh.user(username);
     var itemCount = 0, maxItems = 5;
-
+    
     var res = gh_user.show(function(data) {
         gh_user.repos(function(data) {
             repos = data;
@@ -77,6 +77,7 @@ var run = function() {
             email: data.user.email,
             created_at: data.user.created_at,
             location: data.user.location,
+            gravatar_id: data.user.gravatar_id,
             repos: data.user.public_repo_count,
             plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
             username: username,
