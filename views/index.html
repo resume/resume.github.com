@@ -13,10 +13,12 @@
         </p>
         <p><br /><br /></p>
 
-        <p>
-            <input  id="username" type="text" value="Enter your github username and click on generate" />
-            <button type="button" id="gen">Generate</button>
-        </p>
+        <form id="run" action="." method="get">
+            <p>
+                <input id="username" type="text" placeholder="Enter your github username and click on generate" />
+                <button type="submit" id="gen">Generate</button>
+            </p>
+        </form>
 
     </div>
 
@@ -70,18 +72,10 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('input#username').focus();
-    $('input#username').select();
-
-    $(window).keyup(function(e) {
-        if (e.keyCode == 13) {
-            var genUser = $('#username').val();
-            document.location.href = "/?" + genUser;
-        }
-    });
-    $('#gen').live('click', function() {
+    $('form#run').submit(function(e){
         var genUser = $('#username').val();
-        document.location.href = "?" + genUser;
+        document.location = document.location.pathname + "?" + genUser;
+        e.preventDefault();
     });
 });
 </script>
