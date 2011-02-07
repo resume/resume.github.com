@@ -6,8 +6,9 @@ var urlParams = {};
         d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
         q = window.location.search.substring(1);
 
-    while (e = r.exec(q))
+    while (e = r.exec(q)) {
        urlParams[0] = d(e[1]);
+    }
 })();
 
 var username;
@@ -26,7 +27,7 @@ $(document).ready(function() {
         } catch (e) {
             /*fail silently*/
         }
-    } 
+    }
 });
 
 var error = function() {
@@ -54,8 +55,8 @@ var home = function() {
 var run = function() {
 
     var gh_user = gh.user(username);
-    var itemCount = 0, maxItems = 5;
-    
+    var itemCount = 0, maxItems = 5, maxLanguages = 5;
+
     var res = gh_user.show(function(data) {
         gh_user.repos(function(data) {
             repos = data;
@@ -77,7 +78,7 @@ var run = function() {
         }
 
         var view = {
-            name: name, 
+            name: name,
             email: data.user.email,
             created_at: data.user.created_at,
             location: data.user.location,
@@ -108,9 +109,17 @@ var run = function() {
         var repos = data.repositories;
 
         var sorted = [];
-        var languages = [];
+        var languages = {};
 
         repos.forEach(function(elm, i, arr) {
+            if (arr[i].language) {
+                if (arr[i].language in languages) {
+                    languages[arr[i].language]++;
+                } else {
+                    languages[arr[i].language] = 1;
+                }
+            }
+
             if (arr[i].fork !== false) {
                 return;
             }
@@ -118,18 +127,42 @@ var run = function() {
             var popularity = arr[i].watchers + arr[i].forks;
             sorted.push({position: i, popularity: popularity, info: arr[i]});
         });
- 
+
         function sortByPopularity(a, b) {
             return b.popularity - a.popularity;
         };
 
         sorted.sort(sortByPopularity);
-    
+
+        function sortLanguages(languages, limit) {
+            var sorted_languages = [];
+            for (var lang in languages) {
+                if (typeof(lang) !== "string") {
+                    continue;
+                }
+                sorted_languages.push({
+                    name: lang,
+                    popularity: languages[lang],
+                    toString: function() {
+                        return '<a href="https://github.com/languages/' + this.name + '">' + this.name + '</a>';
+                    }
+                });
+            }
+            if (limit) {
+                sorted_languages = sorted_languages.slice(0, limit);
+            }
+            return sorted_languages.sort(sortByPopularity);
+        }
+
         $.ajax({
             url: 'views/job.html',
             dataType: 'html',
             success: function(response) {
                 var now = new Date().getFullYear();
+
+                if (languages) {
+                    $('#languages').html('I mostly program in ' + sortLanguages(languages, maxLanguages).join(', ') + '.');
+                }
 
                 if (sorted.length > 0) {
                     $('#jobs').html('');
@@ -138,7 +171,7 @@ var run = function() {
                         if (itemCount >= maxItems) {
                             return;
                         }
-    
+
                         var since = new Date(arr[index].info.created_at);
                         since = since.getFullYear();
 
@@ -146,19 +179,20 @@ var run = function() {
                             name: arr[index].info.name,
                             since: since,
                             now: now,
+                            language: arr[index].info.language,
                             description: arr[index].info.description,
                             username: username,
                             watchers: arr[index].info.watchers,
                             forks: arr[index].info.forks
                         };
-   
+
                         if (itemCount == sorted.length - 1 || itemCount == maxItems-1) {
                             view.last = 'last';
                         }
 
                         var template = response;
                         var html = Mustache.to_html(template, view);
-    
+
 
                         $('#jobs').append($(html));
                         ++itemCount;
@@ -200,13 +234,13 @@ var run = function() {
                             login: arr[index].info.login,
                             now: now
                         };
-    
+
                         if (itemCount == sorted.length - 1 || itemCount == maxItems) {
                             view.last = 'last';
                         }
                         var template = response;
                         var html = Mustache.to_html(template, view);
-    
+
                         $('#orgs').append($(html));
                         ++itemCount;
                     });
