@@ -183,7 +183,6 @@ var run = function() {
                         }
                     });
                 } else {
-                    console.log('no languages');
                     $('#mylanguages').hide();
                 }
 
@@ -209,7 +208,7 @@ var run = function() {
                             forks: arr[index].info.forks
                         };
 
-                        if (itemCount == sorted.length - 1 || itemCount == maxItems-1) {
+                        if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
                             view.last = 'last';
                         }
 
