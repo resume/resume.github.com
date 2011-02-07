@@ -42,7 +42,8 @@ strong { font-weight: bold; }
 li { line-height: 24px; border-bottom: 1px solid #ccc; }
 p.enlarge { font-size: 144%; padding-right: 6.5em; line-height: 24px; }
 p.enlarge span { color: #000 }
-.contact-info { margin-top: 7px; text-align: right; font-size: 12px;}
+.contact-info { margin-top: 7px; text-align: right; font-size: 12px; position: relative; float: left; width: 100%;}
+.contact-info a { position :relative; float: left; width: 100%;}
 .contact-info img {float: right; border: 1px solid #ccc; width: 150px; height: 150px; margin: -24px 0 14px;}
 .first h2 { font-style: italic; }
 .last { border-bottom: 0 }
@@ -59,10 +60,10 @@ a#pdf:hover { background: #222; }
 .org p, .job p { margin: 0.75em 0 3em 0; }
 
 .last { border: none; }
-.skills-list {  }
-.skills-list ul { margin: 0; }
-.skills-list li { margin: 3px 0; padding: 3px 0; }
-.skills-list li span { font-size: 152%; display: block; margin-bottom: -2px; padding: 0 }
+.content-languages {  }
+.content-languages ul { margin: 0; display: inline;  float: left; position: relative; width: 30%;}
+.content-languages li { margin: 3px 0; padding: 3px 0; position: relative; float: left; display-inline; }
+.content-languages li span { font-size: 152%; display: block; margin-bottom: -2px; padding: 0 }
 .talent { width: 32%; float: left }
 .talent h2 { margin-bottom: 6px; }
 

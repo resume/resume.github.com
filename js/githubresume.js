@@ -1,6 +1,6 @@
 var urlParams = {};
 var username;
-var trackerId; // set your google analytics tracker ID here
+var trackerId = 'UA-21222559-1';
 
 (function () {
     var e,
@@ -56,7 +56,7 @@ var home = function() {
 var run = function() {
 
     var gh_user = gh.user(username);
-    var itemCount = 0, maxItems = 5, maxLanguages = 5;
+    var itemCount = 0, maxItems = 5, maxLanguages = 6;
 
     var res = gh_user.show(function(data) {
         gh_user.repos(function(data) {
@@ -135,6 +135,7 @@ var run = function() {
 
         sorted.sort(sortByPopularity);
 
+        var languageTotal = 0;
         function sortLanguages(languages, limit) {
             var sorted_languages = [];
             for (var lang in languages) {
@@ -148,6 +149,9 @@ var run = function() {
                         return '<a href="https://github.com/languages/' + this.name + '">' + this.name + '</a>';
                     }
                 });
+
+                languageTotal += languages[lang];
+
             }
             if (limit) {
                 sorted_languages = sorted_languages.slice(0, limit);
@@ -160,9 +164,27 @@ var run = function() {
             dataType: 'html',
             success: function(response) {
                 var now = new Date().getFullYear();
+                languages = sortLanguages(languages, maxLanguages);
 
-                if (languages) {
-                    $('#languages').html('I mostly program in ' + sortLanguages(languages, maxLanguages).join(', ') + '.');
+                if (languages && languages.length > 0) {
+                    var ul = $('<ul class="talent"></ul>');
+                    languages.forEach(function(elm, i, arr) {
+                        x = i + 1;
+                        var percent = parseInt((arr[i].popularity / languageTotal) * 100);
+                        var li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
+                        if (x % 3 == 0 || i == languages.length - 1) {
+                            li.attr('class', 'last');
+                            ul.append(li);
+                            $('#content-languages').append(ul);
+                            ul = $('<ul class="talent"></ul>');
+                        } else {
+                            ul.append(li);
+                            $('#content-languages').append(ul);
+                        }
+                    });
+                } else {
+                    console.log('no languages');
+                    $('#mylanguages').hide();
                 }
 
                 if (sorted.length > 0) {
