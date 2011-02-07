@@ -113,16 +113,16 @@ var run = function() {
         var languages = {};
 
         repos.forEach(function(elm, i, arr) {
+            if (arr[i].fork !== false) {
+                return;
+            }
+            
             if (arr[i].language) {
                 if (arr[i].language in languages) {
                     languages[arr[i].language]++;
                 } else {
                     languages[arr[i].language] = 1;
                 }
-            }
-
-            if (arr[i].fork !== false) {
-                return;
             }
 
             var popularity = arr[i].watchers + arr[i].forks;
