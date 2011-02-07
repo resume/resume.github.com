@@ -21,7 +21,11 @@ $(document).ready(function() {
             home();
         }
     } catch (err) {
-        console.log(err);
+        try {
+            console.log(err);
+        } catch (e) {
+            /*fail silently*/
+        }
     } 
 });
 
