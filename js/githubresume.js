@@ -56,7 +56,7 @@ var home = function() {
 var run = function() {
 
     var gh_user = gh.user(username);
-    var itemCount = 0, maxItems = 5, maxLanguages = 6;
+    var itemCount = 0, maxItems = 5, maxLanguages = 9;
 
     var res = gh_user.show(function(data) {
         gh_user.repos(function(data) {
