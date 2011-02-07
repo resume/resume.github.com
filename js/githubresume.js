@@ -1,4 +1,7 @@
 var urlParams = {};
+var username;
+var trackerId; // set your google analytics tracker ID here
+
 (function () {
     var e,
         a = /\+/g,  // Regex for replacing addition symbol with a space
@@ -10,8 +13,6 @@ var urlParams = {};
        urlParams[0] = d(e[1]);
     }
 })();
-
-var username;
 
 $(document).ready(function() {
     try {
@@ -253,10 +254,9 @@ var run = function() {
 
 };
 
-
-
+if (trackerId) {
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-21222559-1']);
+  _gaq.push(['_setAccount', trackerId]);
   _gaq.push(['_trackPageview']);
 
   (function() {
@@ -264,7 +264,6 @@ var run = function() {
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
-
+}
 
 $(window).bind('error', error);
