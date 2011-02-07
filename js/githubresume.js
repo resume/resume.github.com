@@ -172,7 +172,7 @@ var run = function() {
                         x = i + 1;
                         var percent = parseInt((arr[i].popularity / languageTotal) * 100);
                         var li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
-                        if (x % 3 == 0 || i == languages.length - 1) {
+                        if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
                             li.attr('class', 'last');
                             ul.append(li);
                             $('#content-languages').append(ul);
