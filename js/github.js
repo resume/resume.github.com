@@ -215,20 +215,46 @@
         return this;
     };
 
-    // Get a list of this user's repositories.
+    // Get a list of this user's repositories, 30 per page
     //
     //     gh.user("fitzgen").repos(function (data) {
     //         alert(data.repositories.length);
     //     });
-    gh.user.prototype.repos = function (callback, context) {
-        gh.repo.forUser(this.username, callback, context);
+    gh.user.prototype.repos = function (callback, context, page) {
+        gh.repo.forUser(this.username, callback, context, page);
         return this;
     };
 
-    gh.user.prototype.orgs = function (callback, context) {
-        gh.org.forUser(this.username, callback, context);
-        return this;
-    };
+    // Get a list of all repos for this user.
+    //
+    //     gh.user("fitzgen").allRepos(function (repos) {
+    //          alert(repos.length);
+    //     });
+    gh.user.prototype.allRepos = function(callback, context) {
+      var repos = [];
+      var username = this.username;
+
+      var page = 1;
+
+      var exitCallback = function (repos) { callback.call(context, { repositories: repos }) };
+      
+      var pageLoop = function (data) {
+        repos = repos.concat(data.repositories);
+        var reposLength = data.repositories.length;
+
+        if (reposLength == 0) {
+          exitCallback(repos);
+        }
+        else {
+          page += 1;
+          gh.repo.forUser(username, pageLoop, context, page);
+        }
+      }
+
+      gh.repo.forUser(username, pageLoop, context, page);
+      
+      return this;
+    }
 
     // Make this user fork the repo that lives at
     // http://github.com/user/repo. You must be authenticated as this user for
@@ -273,15 +299,6 @@
             return new gh.repo(user, repo);
         }
         this.repo = repo;
-        this.user = user;
-    };
-
-    gh.org = function(user, org) {
-        if (!(this instanceof gh.org)) {
-            return new gh.org(user, org);
-        }
-
-        this.org = org;
         this.user = user;
     };
 
@@ -412,13 +429,11 @@
     };
 
     // Get all the repos that are owned by `user`.
-    gh.repo.forUser = function (user, callback, context) {
-        jsonp("repos/show/" + user, callback, context);
-        return this;
-    };
+    gh.repo.forUser = function (user, callback, context, page) {
+        if (!page)
+          page = 1;
 
-    gh.org.forUser = function (user, callback, context) {
-        jsonp("user/show/" + user + "/organizations", callback, context);
+        jsonp("repos/show/" + user + '?page=' + page, callback, context);
         return this;
     };
 
@@ -684,3 +699,4 @@
     );
 
 }(window));
+

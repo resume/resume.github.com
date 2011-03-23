@@ -59,7 +59,7 @@ var run = function() {
     var itemCount = 0, maxItems = 5, maxLanguages = 9;
 
     var res = gh_user.show(function(data) {
-        gh_user.repos(function(data) {
+        gh_user.allRepos(function(data) {
             repos = data;
         });
 
@@ -106,7 +106,7 @@ var run = function() {
         });
     });
 
-    gh_user.repos(function(data) {
+    gh_user.allRepos(function(data) {
         var repos = data.repositories;
 
         var sorted = [];
