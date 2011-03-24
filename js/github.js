@@ -218,7 +218,9 @@
     // Get a list of this user's repositories, 30 per page
     //
     //     gh.user("fitzgen").repos(function (data) {
-    //         alert(data.repositories.length);
+    //         data.repositories.forEach(function (repo) {
+    //             ...
+    //         });
     //     });
     gh.user.prototype.repos = function (callback, context, page) {
         gh.repo.forUser(this.username, callback, context, page);
@@ -227,34 +229,32 @@
 
     // Get a list of all repos for this user.
     //
-    //     gh.user("fitzgen").allRepos(function (repos) {
-    //          alert(repos.length);
+    //     gh.user("fitzgen").allRepos(function (data) {
+    //          alert(data.repositories.length);
     //     });
-    gh.user.prototype.allRepos = function(callback, context) {
-      var repos = [];
-      var username = this.username;
+    gh.user.prototype.allRepos = function (callback, context) {
+        var repos = [],
+            username = this.username,
+            page = 1;
 
-      var page = 1;
-
-      var exitCallback = function (repos) { callback.call(context, { repositories: repos }) };
-      
-      var pageLoop = function (data) {
-        repos = repos.concat(data.repositories);
-        var reposLength = data.repositories.length;
-
-        if (reposLength == 0) {
-          exitCallback(repos);
+        function exitCallback () {
+            callback.call(context, { repositories: repos });
         }
-        else {
-          page += 1;
-          gh.repo.forUser(username, pageLoop, context, page);
-        }
-      }
 
-      gh.repo.forUser(username, pageLoop, context, page);
-      
-      return this;
-    }
+        function pageLoop (data) {
+            if (data.repositories.length == 0) {
+                exitCallback();
+            } else {
+                repos = repos.concat(data.repositories);
+                page += 1;
+                gh.repo.forUser(username, pageLoop, context, page);
+            }
+        }
+
+        gh.repo.forUser(username, pageLoop, context, page);
+
+        return this;
+    };
 
     // Make this user fork the repo that lives at
     // http://github.com/user/repo. You must be authenticated as this user for
