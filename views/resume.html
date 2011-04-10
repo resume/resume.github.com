@@ -15,7 +15,7 @@
 						{{#gravatar_id}}
 						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt=""/>
 						{{/gravatar_id}}
-						<h3><a href="mailto:{{email}}">{{email}}</a></h3>
+						{{#email}}<h3><a href="mailto:{{email}}">{{email}}</a></h3>{{/email}}
 					</div><!--// .contact-info -->
 				</div>
 			</div><!--// .yui-gc -->
@@ -87,7 +87,7 @@
 		</div><!--// bd -->
 
 		<div id="ft">
-			<p>{{name}} &mdash; <a href="mailto:{{email}}">{{email}}</a> &mdash; <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
+			<p>{{name}} &mdash; {{#email}}<a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
 		</div><!--// footer -->
 
 	</div><!-- // inner -->
