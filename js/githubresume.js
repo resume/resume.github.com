@@ -67,7 +67,7 @@ var run = function() {
         since = since.getFullYear();
 
         var addHttp = '';
-        if (data.user.blog !== undefined && data.user.blog !== null) {
+        if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
             if (data.user.blog.indexOf('http') < 0) {
                 addHttp = 'http://';
             }
