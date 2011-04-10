@@ -91,7 +91,7 @@ var run = function() {
         };
 
         if (data.user.blog !== undefined && data.user.blog !== null) {
-            view.blog =  addHttp + data.user.blog;
+            view.blog = addHttp + data.user.blog;
         }
 
         $.ajax({
