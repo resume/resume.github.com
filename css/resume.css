@@ -128,3 +128,10 @@ li { line-height: 24px; border-bottom: 1px solid #ccc; }
 .enlarge-medium {
     font-size: 15px;
 }
+
+noscript {
+	display: block;
+	margin-top: 30px;
+	font-size: 152%;
+	color: #990003;
+}
