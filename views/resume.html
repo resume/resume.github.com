@@ -38,7 +38,7 @@
 								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{plural}}</a>.
 								 I've been using github.com since {{since}}
 								 {{#blog}}
-								 and sometimes I blog at <a href="" id="myblog" title="my blog">{{blog}}</a>.
+								 and sometimes I blog at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>.
 								 {{/blog}}
 							</p>
 							<p id="languages" class="enlarge"></p>
@@ -96,9 +96,3 @@
 	</div><!-- // inner -->
 
 </div><!--// doc -->
-<script type="text/javascript">
-$(document).ready(function() {
-    var blog = $('#myblog').html();
-    $('#myblog').attr('href', blog);
-});
-</script>
