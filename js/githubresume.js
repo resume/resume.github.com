@@ -90,7 +90,7 @@ var run = function() {
             since: since
         };
 
-        if (data.user.blog !== undefined && data.user.blog !== null) {
+        if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
             view.blog = addHttp + data.user.blog;
         }
 
