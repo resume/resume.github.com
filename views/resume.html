@@ -35,7 +35,7 @@
 								 {{#location}}
 								 based in {{location}}
 								 {{/location}}
-								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{plural}}</a>.
+								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{plural}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}.
 								 I've been using github.com since {{since}}
 								 {{#blog}}
 								 and sometimes I blog at <a href="" id="myblog" title="my blog">{{blog}}</a>.
