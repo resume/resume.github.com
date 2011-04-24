@@ -65,6 +65,15 @@ var run = function() {
 
         var since = new Date(data.user.created_at);
         since = since.getFullYear();
+        var currentYear = (new Date).getFullYear();
+		switch (since) {
+			case currentYear-1:
+				since = 'last year';
+				break;
+			case currentYear:
+				since = 'this year';
+				break;
+		}
 
         var addHttp = '';
         if (data.user.blog !== undefined && data.user.blog !== null) {
