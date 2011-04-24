@@ -63,8 +63,9 @@ var run = function() {
             repos = data;
         });
 
-        var since = new Date(data.user.created_at);
-        since = since.getFullYear();
+        var sinceDate = new Date(data.user.created_at);
+        since = sinceDate.getFullYear();
+		var sinceMonth = sinceDate.getMonth();
         var currentYear = (new Date).getFullYear();
 		switch (since) {
 			case currentYear-1:
@@ -91,6 +92,7 @@ var run = function() {
             name: name,
             email: data.user.email,
             created_at: data.user.created_at,
+			earlyAdopter: 0,
             location: data.user.location,
             gravatar_id: data.user.gravatar_id,
             repos: data.user.public_repo_count,
@@ -103,6 +105,11 @@ var run = function() {
             view.blog =  addHttp + data.user.blog;
         }
 
+		// We consider a limit of 4 months since the Github opening (Feb 2008) to be considered as an early adopter
+		if (since == '2008' && sinceMonth <= 5) {
+			view.earlyAdopter = 1;
+		}
+		
         $.ajax({
             url: 'views/resume.html',
             dataType: 'html',
