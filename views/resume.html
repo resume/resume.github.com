@@ -1,11 +1,11 @@
 <div id="doc2" class="yui-t7">
-	<div id="inner">
+	<div id="inner" class="vcard">
 
 		<div id="hd">
 			<div class="yui-gc">
 				<div class="yui-u first">
 					<hgroup>
-						<h1>{{name}}</h1>
+						<h1 class="fn">{{name}}</h1>
 						<h2>Passionate github user</h2>
 					</hgroup>
 				</div>
@@ -13,9 +13,9 @@
 				<div class="yui-u">
 					<div class="contact-info">
 						{{#gravatar_id}}
-						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt=""/>
+						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt="" class="photo" />
 						{{/gravatar_id}}
-						<h3><a href="mailto:{{email}}">{{email}}</a></h3>
+						<h3><a href="mailto:{{email}}" class="email">{{email}}</a></h3>
 					</div><!--// .contact-info -->
 				</div>
 			</div><!--// .yui-gc -->
@@ -33,12 +33,12 @@
 							<p class="enlarge">
 								 I'm a developer
 								 {{#location}}
-								 based in {{location}}
+								 based in <span class="adr locality">{{location}}</span>
 								 {{/location}}
 								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{plural}}</a>.
 								 I've been using github.com since {{since}}
 								 {{#blog}}
-								 and sometimes I blog at <a href="" id="myblog" title="my blog">{{blog}}</a>.
+								 and sometimes I blog at <a href="" id="myblog" title="my blog" class="url">{{blog}}</a>.
 								 {{/blog}}
 							</p>
 							<p id="languages" class="enlarge"></p>
@@ -90,7 +90,7 @@
 		</div><!--// bd -->
 
 		<div id="ft">
-			<p>{{name}} &mdash; <a href="mailto:{{email}}">{{email}}</a> &mdash; <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
+			<p>{{name}} &mdash; <a href="mailto:{{email}}">{{email}}</a> &mdash; <a href="https://github.com/{{username}}" title="Github profile" class="url">https://github.com/{{username}}</a></p>
 		</div><!--// footer -->
 
 	</div><!-- // inner -->
