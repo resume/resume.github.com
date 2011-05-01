@@ -233,26 +233,7 @@
     //          alert(data.repositories.length);
     //     });
     gh.user.prototype.allRepos = function (callback, context) {
-        var repos = [],
-            username = this.username,
-            page = 1;
-
-        function exitCallback () {
-            callback.call(context, { repositories: repos });
-        }
-
-        function pageLoop (data) {
-            if (data.repositories.length == 0) {
-                exitCallback();
-            } else {
-                repos = repos.concat(data.repositories);
-                page += 1;
-                gh.repo.forUser(username, pageLoop, context, page);
-            }
-        }
-
-        gh.repo.forUser(username, pageLoop, context, page);
-
+        gh.repo.search('username:' + this.username, "", callback, context);
         return this;
     };
 
@@ -282,6 +263,11 @@
             return this;
         }
     );
+    
+    gh.user.prototype.orgs = function(callback, context) {
+        jsonp("user/show/" + this.username + "/organizations", callback, context);
+        return this;
+    }
 
     // Search users for `query`.
     gh.user.search = function (query, callback, context) {
@@ -425,6 +411,7 @@
             context = arguments[2];
         }
         url += "?" + paramify(opts);
+        jsonp(url, callback, context);
         return this;
     };
 
