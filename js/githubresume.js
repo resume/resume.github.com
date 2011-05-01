@@ -54,15 +54,10 @@ var home = function() {
 };
 
 var run = function() {
-
     var gh_user = gh.user(username);
     var itemCount = 0, maxItems = 5, maxLanguages = 9;
 
     var res = gh_user.show(function(data) {
-        gh_user.allRepos(function(data) {
-            repos = data;
-        });
-
         var since = new Date(data.user.created_at);
         since = since.getFullYear();
 
@@ -116,7 +111,7 @@ var run = function() {
             if (arr[i].fork !== false) {
                 return;
             }
-            
+
             if (arr[i].language) {
                 if (arr[i].language in languages) {
                     languages[arr[i].language]++;
