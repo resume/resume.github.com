@@ -53,6 +53,28 @@ var home = function() {
     });
 };
 
+var all_promises = function(array){
+    var deferred = $.Deferred();
+    var fulfilled = 0, length = array.length;
+    var results = [];
+
+    if (length === 0) { 
+        deferred.resolve(results);
+    } else {
+        array.forEach(function(promise, i){
+            $.when(promise()).then(function(value) {
+                results[i] = value;
+                fulfilled++;
+                if(fulfilled === length){
+                    deferred.resolve(results);
+                }
+            });
+        });
+    }
+
+    return deferred.promise();
+};
+
 var run = function() {
     var gh_user = gh.user(username);
     var itemCount = 0, maxItems = 5, maxLanguages = 9;
@@ -106,119 +128,165 @@ var run = function() {
 
         var sorted = [];
         var languages = {};
+        var promises = [];
 
-        repos.forEach(function(elm, i, arr) {
-            if (arr[i].fork !== false) {
-                return;
-            }
-
-            if (arr[i].language) {
-                if (arr[i].language in languages) {
-                    languages[arr[i].language]++;
+        function processRepo(repo, pos) {
+            if (repo.language) {
+                if (repo.language in languages) {
+                    languages[repo.language]++;
                 } else {
-                    languages[arr[i].language] = 1;
+                    languages[repo.language] = 1;
                 }
             }
 
-            var popularity = arr[i].watchers + arr[i].forks;
-            sorted.push({position: i, popularity: popularity, info: arr[i]});
+            var popularity = repo.watchers + repo.forks;
+            sorted.push({position: pos, popularity: popularity, info: repo});
+        }
+
+        repos.forEach(function(elm, i, arr) {
+            promises.push(function() {
+                return $.Deferred(function(dfd) {
+                    // if the repo is a fork, make some jsonp calls
+                    // and only resolve the promise after all jsonp
+                    // calls are finished
+                    if (arr[i].fork !== false) {
+                        var gh_repo = gh.repo(username, arr[i].name);
+                        gh_repo.show(function(data) {
+                            var parent = data.repository.parent.split("/");
+                            var gh_fork_parent = gh.repo(parent[0], parent[1]);
+                            gh_fork_parent.contributors(function(data) {
+                                var contribs = data.contributors;
+                                var found = 0;
+
+                                contribs.forEach(function(c) {
+                                    if (username == c.login) {
+                                        if (c.contributions > -1) {
+                                            processRepo(arr[i], i);
+                                            dfd.resolve();
+                                            found = 1;
+                                        }
+                                    }
+                                });
+
+                                // if none of the contributors match the username
+                                // we still need to resolve the promise
+                                if (found !== 1) {
+                                    dfd.resolve();
+                                }
+                            });
+                        });
+                        return;
+                    }
+
+                    processRepo(arr[i], i);
+                    dfd.resolve();
+                }).promise();
+            });
         });
 
         function sortByPopularity(a, b) {
             return b.popularity - a.popularity;
         };
 
-        sorted.sort(sortByPopularity);
+        $.when(all_promises(promises)).then(function() {
+            sorted.sort(sortByPopularity);
 
-        var languageTotal = 0;
-        function sortLanguages(languages, limit) {
-            var sorted_languages = [];
-            for (var lang in languages) {
-                if (typeof(lang) !== "string") {
-                    continue;
-                }
-                sorted_languages.push({
-                    name: lang,
-                    popularity: languages[lang],
-                    toString: function() {
-                        return '<a href="https://github.com/languages/' + this.name + '">' + this.name + '</a>';
+            var languageTotal = 0;
+            function sortLanguages(languages, limit) {
+                var sorted_languages = [];
+                for (var lang in languages) {
+                    if (typeof(lang) !== "string") {
+                        continue;
                     }
-                });
-
-                languageTotal += languages[lang];
-
-            }
-            if (limit) {
-                sorted_languages = sorted_languages.slice(0, limit);
-            }
-            return sorted_languages.sort(sortByPopularity);
-        }
-
-        $.ajax({
-            url: 'views/job.html',
-            dataType: 'html',
-            success: function(response) {
-                var now = new Date().getFullYear();
-                languages = sortLanguages(languages, maxLanguages);
-
-                if (languages && languages.length > 0) {
-                    var ul = $('<ul class="talent"></ul>');
-                    languages.forEach(function(elm, i, arr) {
-                        x = i + 1;
-                        var percent = parseInt((arr[i].popularity / languageTotal) * 100);
-                        var li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
-                        if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
-                            li.attr('class', 'last');
-                            ul.append(li);
-                            $('#content-languages').append(ul);
-                            ul = $('<ul class="talent"></ul>');
-                        } else {
-                            ul.append(li);
-                            $('#content-languages').append(ul);
+                    sorted_languages.push({
+                        name: lang,
+                        popularity: languages[lang],
+                        toString: function() {
+                            return '<a href="https://github.com/languages/' + this.name + '">' + this.name + '</a>';
                         }
                     });
-                } else {
-                    $('#mylanguages').hide();
+
+                    languageTotal += languages[lang];
+
                 }
-
-                if (sorted.length > 0) {
-                    $('#jobs').html('');
-                    itemCount = 0;
-                    sorted.forEach(function(elm, index, arr) {
-                        if (itemCount >= maxItems) {
-                            return;
-                        }
-
-                        var since = new Date(arr[index].info.created_at);
-                        since = since.getFullYear();
-
-                        var view = {
-                            name: arr[index].info.name,
-                            since: since,
-                            now: now,
-                            language: arr[index].info.language,
-                            description: arr[index].info.description,
-                            username: username,
-                            watchers: arr[index].info.watchers,
-                            forks: arr[index].info.forks
-                        };
-
-                        if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
-                            view.last = 'last';
-                        }
-
-                        var template = response;
-                        var html = Mustache.to_html(template, view);
-
-
-                        $('#jobs').append($(html));
-                        ++itemCount;
-                    });
-                } else {
-                    $('#jobs').html('');
-                    $('#jobs').append('<p class="enlarge">I do not have any public repository. Sorry.</p>');
+                if (limit) {
+                    sorted_languages = sorted_languages.slice(0, limit);
                 }
+                return sorted_languages.sort(sortByPopularity);
             }
+
+            $.ajax({
+                url: 'views/job.html',
+                dataType: 'html',
+                success: function(response) {
+                    var now = new Date().getFullYear();
+                    languages = sortLanguages(languages, maxLanguages);
+
+                    if (languages && languages.length > 0) {
+                        var ul = $('<ul class="talent"></ul>');
+                        languages.forEach(function(elm, i, arr) {
+                            x = i + 1;
+                            var percent = parseInt((arr[i].popularity / languageTotal) * 100);
+                            var li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
+                            if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
+                                li.attr('class', 'last');
+                                ul.append(li);
+                                $('#content-languages').append(ul);
+                                ul = $('<ul class="talent"></ul>');
+                            } else {
+                                ul.append(li);
+                                $('#content-languages').append(ul);
+                            }
+                        });
+                    } else {
+                        $('#mylanguages').hide();
+                    }
+
+                    if (sorted.length > 0) {
+                        $('#jobs').html('');
+                        itemCount = 0;
+                        sorted.forEach(function(elm, index, arr) {
+                            if (itemCount >= maxItems) {
+                                return;
+                            }
+
+                            var relation = 'Creator & Owner';
+                            if (arr[index].info.fork === true) {
+                                relation = 'Contributor';
+                            }
+
+                            var since = new Date(arr[index].info.created_at);
+                            since = since.getFullYear();
+
+                            var view = {
+                                name: arr[index].info.name,
+                                since: since,
+                                now: now,
+                                language: arr[index].info.language,
+                                description: arr[index].info.description,
+                                username: username,
+                                relation: relation,
+                                watchers: arr[index].info.watchers,
+                                forks: arr[index].info.forks
+                            };
+
+                            if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
+                                view.last = 'last';
+                            }
+
+                            var template = response;
+                            var html = Mustache.to_html(template, view);
+
+
+                            $('#jobs').append($(html));
+                            ++itemCount;
+                        });
+                    } else {
+                        $('#jobs').html('');
+                        $('#jobs').append('<p class="enlarge">I do not have any public repository. Sorry.</p>');
+                    }
+                }
+            });
         });
     });
 
