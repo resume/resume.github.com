@@ -216,7 +216,7 @@ var run = function() {
                     });
                 } else {
                     $('#jobs').html('');
-                    $('#jobs').append('<p class="enlarge">I do not have any public repository. Sorry.</p>');
+                    $('#jobs').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
                 }
             }
         });
