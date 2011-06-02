@@ -87,9 +87,32 @@ var run = function() {
             repos: data.user.public_repo_count,
             plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
             username: username,
+			userStatus: 'Github user',
             since: since
         };
-
+		
+		view.userStatus = getUserStatus();
+		function getUserStatus() {
+			if (view.repos == 0) {
+				return 'Inactive Github user';
+			}
+			else if (view.repos > 0 && view.repos <= 1) {
+				return 'Newbie Github user';
+			}
+			else if (view.repos > 1 && view.repos <= 5) {
+				return 'Regular Github user';
+			}
+			else if (view.repos > 5 && view.repos <= 10) {
+				return 'Advanced Github user';
+			}
+			else if (view.repos > 10 && view.repos <= 30) {
+				return 'Enthusiastic Github user';
+			}
+			else if (view.repos > 30) {
+				return 'Passionate Github user';
+			}
+		};
+		
         if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
             view.blog = addHttp + data.user.blog;
         }
@@ -274,7 +297,7 @@ var run = function() {
     });
 
 };
-
+/*
 if (trackerId) {
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', trackerId]);
@@ -286,5 +309,5 @@ if (trackerId) {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 }
-
+*/
 $(window).bind('error', error);
