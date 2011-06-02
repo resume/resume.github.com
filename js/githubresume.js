@@ -87,30 +87,42 @@ var run = function() {
             repos: data.user.public_repo_count,
             plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
             username: username,
-			userStatus: 'Github user',
+            userStatus: 'Github user',
             since: since
         };
 		
-		view.userStatus = getUserStatus();
-		function getUserStatus() {
-			if (view.repos == 0) {
-				return 'Inactive Github user';
-			}
-			else if (view.repos > 0 && view.repos <= 1) {
-				return 'Newbie Github user';
-			}
-			else if (view.repos > 1 && view.repos <= 5) {
-				return 'Regular Github user';
-			}
-			else if (view.repos > 5 && view.repos <= 10) {
-				return 'Advanced Github user';
-			}
-			else if (view.repos > 10 && view.repos <= 30) {
-				return 'Enthusiastic Github user';
-			}
-			else if (view.repos > 30) {
-				return 'Passionate Github user';
-			}
+        view.userStatus = getUserStatus();
+        function getUserStatus() {
+            var COEF_REPOS = 2;
+            var COEF_GISTS = 0.25;
+            var COEF_FOLLOWERS = 0.5;
+            var COEF_FOLLOWING = 0.25;
+            var FIRST_STEP = 0;
+            var SECOND_STEP = 5;
+            var THIRD_STEP = 20;
+            var FOURTH_STEP = 50;
+            var FIFTH_STEP = 150;
+            
+            var statusScore = view.repos*COEF_REPOS + data.user.public_gist_count*COEF_GISTS + data.user.followers_count*COEF_FOLLOWERS + data.user.following_count*COEF_FOLLOWING;
+			
+            if (statusScore == FIRST_STEP) {
+                return 'Inactive Github user';
+            }
+            else if (statusScore > FIRST_STEP && statusScore <= SECOND_STEP) {
+                return 'Newbie Github user';
+            }
+            else if (statusScore > SECOND_STEP && statusScore <= THIRD_STEP) {
+                return 'Regular Github user';
+            }
+            else if (statusScore > THIRD_STEP && statusScore <= FOURTH_STEP) {
+                return 'Advanced Github user';
+            }
+            else if (statusScore > FOURTH_STEP && statusScore <= FIFTH_STEP) {
+                return 'Enthusiastic Github user';
+            }
+            else if (statusScore > FIFTH_STEP) {
+                return 'Passionate Github user';
+            }
 		};
 		
         if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
@@ -297,7 +309,7 @@ var run = function() {
     });
 
 };
-/*
+
 if (trackerId) {
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', trackerId]);
@@ -309,5 +321,5 @@ if (trackerId) {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 }
-*/
+
 $(window).bind('error', error);
