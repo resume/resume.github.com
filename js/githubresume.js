@@ -63,8 +63,9 @@ var run = function() {
             repos = data;
         });
 
-        var since = new Date(data.user.created_at);
-        since = since.getFullYear();
+        var sinceDate = new Date(data.user.created_at);
+        since = sinceDate.getFullYear();
+        var sinceMonth = sinceDate.getMonth();
 
         var addHttp = '';
         if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
@@ -82,6 +83,7 @@ var run = function() {
             name: name,
             email: data.user.email,
             created_at: data.user.created_at,
+            earlyAdopter: 0,
             location: data.user.location,
             gravatar_id: data.user.gravatar_id,
             repos: data.user.public_repo_count,
@@ -90,6 +92,11 @@ var run = function() {
             userStatus: 'Github user',
             since: since
         };
+        
+        // We consider a limit of 4 months since the Github opening (Feb 2008) to be considered as an early adopter
+        if (since == '2008' && sinceMonth <= 5) {
+            view.earlyAdopter = 1;
+        }
 		
         view.userStatus = getUserStatus();
         function getUserStatus() {
@@ -102,8 +109,23 @@ var run = function() {
             var THIRD_STEP = 20;
             var FOURTH_STEP = 50;
             var FIFTH_STEP = 150;
+            var EXTRA_POINT_GAIN = 1;
             
-            var statusScore = view.repos*COEF_REPOS + data.user.public_gist_count*COEF_GISTS + data.user.followers_count*COEF_FOLLOWERS + data.user.following_count*COEF_FOLLOWING;
+            var statusScore = view.repos * COEF_REPOS 
+                            + data.user.public_gist_count * COEF_GISTS 
+                            + data.user.followers_count * COEF_FOLLOWERS 
+                            + data.user.following_count * COEF_FOLLOWING;
+            
+            // Extra points
+            // - Early adopter
+            if (view.earlyAdopter == 1) {
+                statusScore += EXTRA_POINT_GAIN;
+            }
+            // - Blog & Email & Location
+        	if (view.location && view.location != '' && view.email && view.email != '' && data.user.blog && data.user.blog != '') {
+        	    statusScore += EXTRA_POINT_GAIN;
+        	}
+			
 			
             if (statusScore == FIRST_STEP) {
                 return 'Inactive Github user';
