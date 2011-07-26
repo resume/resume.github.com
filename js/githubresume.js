@@ -81,8 +81,8 @@ var run = function() {
             gravatar_id: data.user.gravatar_id,
             repos: data.user.public_repo_count,
             reposLabel: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
-			followers: data.user.followers_count,
-			followersLabel: data.user.followers_count > 1 ? 'followers' : 'follower',
+            followers: data.user.followers_count,
+            followersLabel: data.user.followers_count > 1 ? 'followers' : 'follower',
             username: username,
             since: since
         };
