@@ -15,7 +15,7 @@
 						{{#gravatar_id}}
 						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt=""/>
 						{{/gravatar_id}}
-						<h3><a href="mailto:{{email}}">{{email}}</a></h3>
+						{{#email}}<h3><a href="mailto:{{email}}">{{email}}</a></h3>{{/email}}
 					</div><!--// .contact-info -->
 				</div>
 			</div><!--// .yui-gc -->
@@ -35,7 +35,7 @@
 								 {{#location}}
 								 based in {{location}}
 								 {{/location}}
-								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{plural}}</a>.
+								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{#followers}}&nbsp;and {{followers}} {{followersLabel}}{{/followers}}.
 								 I've been using github.com since {{since}}{{#blog}}&nbsp;and sometimes I blog at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>{{/blog}}.
 							</p>
 							<p id="languages" class="enlarge"></p>
@@ -87,7 +87,7 @@
 		</div><!--// bd -->
 
 		<div id="ft">
-			<p>{{name}} &mdash; <a href="mailto:{{email}}">{{email}}</a> &mdash; <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
+			<p>{{name}} &mdash; {{#email}}<a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
 		</div><!--// footer -->
 
 	</div><!-- // inner -->

@@ -80,7 +80,9 @@ var run = function() {
             location: data.user.location,
             gravatar_id: data.user.gravatar_id,
             repos: data.user.public_repo_count,
-            plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
+            reposLabel: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
+			followers: data.user.followers_count,
+			followersLabel: data.user.followers_count > 1 ? 'followers' : 'follower',
             username: username,
             since: since
         };
