@@ -160,7 +160,6 @@ var run = function() {
             url: 'views/job.html',
             dataType: 'html',
             success: function(response) {
-                var now = new Date().getFullYear();
                 languages = sortLanguages(languages, maxLanguages);
 
                 if (languages && languages.length > 0) {
@@ -193,11 +192,17 @@ var run = function() {
 
                         var since = new Date(arr[index].info.created_at);
                         since = since.getFullYear();
+						var until = new Date(arr[index].info.pushed_at);
+						until = until.getFullYear();
+						if (since == until) {
+							date = since
+						} else {
+							date = since + ' - ' + until
+						}
 
                         var view = {
                             name: arr[index].info.name,
-                            since: since,
-                            now: now,
+                            date:date,
                             language: arr[index].info.language,
                             description: arr[index].info.description,
                             username: username,
