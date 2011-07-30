@@ -54,18 +54,18 @@ var home = function() {
 };
 
 var run = function() {
-    var gh_user = gh.user(username);
-    var itemCount = 0, maxItems = 5, maxLanguages = 9;
+    var gh_user = gh.user(username),
+        itemCount = 0,
+        maxItems = 5,
+        maxLanguages = 9;
 
     var res = gh_user.show(function(data) {
         var since = new Date(data.user.created_at);
         since = since.getFullYear();
 
         var addHttp = '';
-        if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
-            if (data.user.blog.indexOf('http') < 0) {
-                addHttp = 'http://';
-            }
+        if (data.user.blog && data.user.blog.indexOf('http') < 0) {
+            addHttp = 'http://';
         }
 
         var name = username;
@@ -95,8 +95,8 @@ var run = function() {
             url: 'views/resume.html',
             dataType: 'html',
             success: function(data) {
-                var template = data;
-                var html = Mustache.to_html(template, view);
+                var template = data,
+                    html = Mustache.to_html(template, view);
                 $('#resume').html(html);
                 document.title = name + "'s Résumé";
             }
@@ -104,10 +104,10 @@ var run = function() {
     });
 
     gh_user.allRepos(function(data) {
-        var repos = data.repositories;
-
-        var sorted = [];
-        var languages = {};
+        var repos = data.repositories,
+            sorted = [],
+            languages = {},
+            popularity;
 
         repos.forEach(function(elm, i, arr) {
             if (arr[i].fork !== false) {
@@ -122,7 +122,7 @@ var run = function() {
                 }
             }
 
-            var popularity = arr[i].watchers + arr[i].forks;
+            popularity = arr[i].watchers + arr[i].forks;
             sorted.push({position: i, popularity: popularity, info: arr[i]});
         });
 
@@ -135,6 +135,7 @@ var run = function() {
         var languageTotal = 0;
         function sortLanguages(languages, limit) {
             var sorted_languages = [];
+
             for (var lang in languages) {
                 if (typeof(lang) !== "string") {
                     continue;
@@ -148,11 +149,12 @@ var run = function() {
                 });
 
                 languageTotal += languages[lang];
-
             }
+            
             if (limit) {
                 sorted_languages = sorted_languages.slice(0, limit);
             }
+            
             return sorted_languages.sort(sortByPopularity);
         }
 
@@ -161,13 +163,16 @@ var run = function() {
             dataType: 'html',
             success: function(response) {
                 languages = sortLanguages(languages, maxLanguages);
-
+                
                 if (languages && languages.length > 0) {
-                    var ul = $('<ul class="talent"></ul>');
+                    var ul = $('<ul class="talent"></ul>'),
+                        percent, li;
+                    
                     languages.forEach(function(elm, i, arr) {
                         x = i + 1;
-                        var percent = parseInt((arr[i].popularity / languageTotal) * 100);
-                        var li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
+                        percent = parseInt((arr[i].popularity / languageTotal) * 100);
+                        li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
+                        
                         if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
                             li.attr('class', 'last');
                             ul.append(li);
@@ -185,14 +190,16 @@ var run = function() {
                 if (sorted.length > 0) {
                     $('#jobs').html('');
                     itemCount = 0;
+                    var since, until, date, view, template, html;
+                    
                     sorted.forEach(function(elm, index, arr) {
                         if (itemCount >= maxItems) {
                             return;
                         }
 
-                        var since = new Date(arr[index].info.created_at);
+                        since = new Date(arr[index].info.created_at);
                         since = since.getFullYear();
-                        var until = new Date(arr[index].info.pushed_at);
+                        until = new Date(arr[index].info.pushed_at);
                         until = until.getFullYear();
                         if (since == until) {
                             date = since;
@@ -200,7 +207,7 @@ var run = function() {
                             date = since + ' - ' + until;
                         }
 
-                        var view = {
+                        view = {
                             name: arr[index].info.name,
                             date: date,
                             language: arr[index].info.language,
@@ -214,25 +221,22 @@ var run = function() {
                             view.last = 'last';
                         }
 
-                        var template = response;
-                        var html = Mustache.to_html(template, view);
-
+                        template = response;
+                        html = Mustache.to_html(template, view);
 
                         $('#jobs').append($(html));
                         ++itemCount;
                     });
                 } else {
-                    $('#jobs').html('');
-                    $('#jobs').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
+                    $('#jobs').html('').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
                 }
             }
         });
     });
 
     gh_user.orgs(function(data) {
-        var orgs = data.organizations;
-
-        var sorted = [];
+        var orgs = data.organizations,
+            sorted = [];
 
         orgs.forEach(function(elm, i, arr) {
             if (arr[i].login === undefined) {
@@ -249,12 +253,15 @@ var run = function() {
 
                 if (sorted.length > 0) {
                     $('#orgs').html('');
+                    
+                    var name, view, template, html;
+                    
                     sorted.forEach(function(elm, index, arr) {
                         if (itemCount >= maxItems) {
                             return;
                         }
-                        var name = (arr[index].info.name || arr[index].info.login);
-                        var view = {
+                        name = (arr[index].info.name || arr[index].info.login);
+                        view = {
                             name: name,
                             now: now
                         };
@@ -262,8 +269,8 @@ var run = function() {
                         if (itemCount == sorted.length - 1 || itemCount == maxItems) {
                             view.last = 'last';
                         }
-                        var template = response;
-                        var html = Mustache.to_html(template, view);
+                        template = response;
+                        html = Mustache.to_html(template, view);
 
                         $('#orgs').append($(html));
                         ++itemCount;
