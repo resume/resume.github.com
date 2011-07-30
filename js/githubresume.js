@@ -235,7 +235,7 @@ var run = function() {
         var sorted = [];
 
         orgs.forEach(function(elm, i, arr) {
-            if (arr[i].name === undefined) {
+            if (arr[i].login === undefined) {
                 return;
             }
             sorted.push({position: i, info: arr[i]});
@@ -253,9 +253,9 @@ var run = function() {
                         if (itemCount >= maxItems) {
                             return;
                         }
+                        var name = (arr[index].info.name || arr[index].info.login);
                         var view = {
-                            name: arr[index].info.name,
-                            login: arr[index].info.login,
+                            name: name,
                             now: now
                         };
 
