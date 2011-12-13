@@ -214,7 +214,9 @@ var run = function() {
                             description: arr[index].info.description,
                             username: username,
                             watchers: arr[index].info.watchers,
-                            forks: arr[index].info.forks
+                            forks: arr[index].info.forks,
+                            watchersLabel: arr[index].info.watchers > 1 ? 'watchers' : 'watcher',
+                            forksLabel: arr[index].info.forks > 1 ? 'forks' : 'fork',
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
