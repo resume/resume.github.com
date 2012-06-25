@@ -53,42 +53,67 @@ var home = function() {
     });
 };
 
+var github_user = function(username, callback) {
+    $.getJSON('https://api.github.com/users/' + username, callback);
+}
+
+var github_user_repos = function(username, callback, page_number, prev_data) {
+    var page = (page_number ? page_number : 1),
+        url = 'https://api.github.com/users/' + username + '/repos',
+        data = (prev_data ? prev_data : []);
+
+    if (page_number > 1) {
+      url += '?page=' + page_number;
+    }
+    $.getJSON(url, function(repos) {
+        data = data.concat(repos);
+        if (repos.length > 0) {
+            github_user_repos(username, callback, page + 1, data);
+        } else {
+            callback(data);
+        }
+    });
+}
+
+var github_user_orgs = function(username, callback) {
+    $.getJSON('https://api.github.com/users/' + username + '/orgs', callback);
+}
+
 var run = function() {
-    var gh_user = gh.user(username),
-        itemCount = 0,
+    var itemCount = 0,
         maxItems = 5,
         maxLanguages = 9;
 
-    var res = gh_user.show(function(data) {
-        var since = new Date(data.user.created_at);
+    var res = github_user(username, function(data) {
+        var since = new Date(data.created_at);
         since = since.getFullYear();
 
         var addHttp = '';
-        if (data.user.blog && data.user.blog.indexOf('http') < 0) {
+        if (data.blog && data.blog.indexOf('http') < 0) {
             addHttp = 'http://';
         }
 
         var name = username;
-        if (data.user.name !== null && data.user.name !== undefined) {
-            name = data.user.name;
+        if (data.name !== null && data.name !== undefined) {
+            name = data.name;
         }
 
         var view = {
             name: name,
-            email: data.user.email,
-            created_at: data.user.created_at,
-            location: data.user.location,
-            gravatar_id: data.user.gravatar_id,
-            repos: data.user.public_repo_count,
-            reposLabel: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
-            followers: data.user.followers_count,
-            followersLabel: data.user.followers_count > 1 ? 'followers' : 'follower',
+            email: data.email,
+            created_at: data.created_at,
+            location: data.location,
+            gravatar_id: data.gravatar_id,
+            repos: data.public_repos,
+            reposLabel: data.public_repos > 1 ? 'repositories' : 'repository',
+            followers: data.followers,
+            followersLabel: data.followers > 1 ? 'followers' : 'follower',
             username: username,
             since: since
         };
 
-        if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
-            view.blog = addHttp + data.user.blog;
+        if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
+            view.blog = addHttp + data.blog;
         }
 
         $.ajax({
@@ -103,13 +128,12 @@ var run = function() {
         });
     });
 
-    gh_user.allRepos(function(data) {
-        var repos = data.repositories,
-            sorted = [],
+    github_user_repos(username, function(data) {
+        var sorted = [],
             languages = {},
             popularity;
 
-        repos.forEach(function(elm, i, arr) {
+        data.forEach(function(elm, i, arr) {
             if (arr[i].fork !== false) {
                 return;
             }
@@ -236,11 +260,10 @@ var run = function() {
         });
     });
 
-    gh_user.orgs(function(data) {
-        var orgs = data.organizations,
-            sorted = [];
+    github_user_orgs(username, function(data) {
+        var sorted = [];
 
-        orgs.forEach(function(elm, i, arr) {
+        data.forEach(function(elm, i, arr) {
             if (arr[i].login === undefined) {
                 return;
             }
