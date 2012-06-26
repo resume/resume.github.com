@@ -54,20 +54,20 @@ var home = function() {
 };
 
 var github_user = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username, callback);
+    $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
 }
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/users/' + username + '/repos',
+        url = 'https://api.github.com/users/' + username + '/repos?callback=?',
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
-      url += '?page=' + page_number;
+      url += '&page=' + page_number;
     }
     $.getJSON(url, function(repos) {
-        data = data.concat(repos);
-        if (repos.length > 0) {
+        data = data.concat(repos.data);
+        if (repos.data.length > 0) {
             github_user_repos(username, callback, page + 1, data);
         } else {
             callback(data);
@@ -76,7 +76,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
 }
 
 var github_user_orgs = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '/orgs', callback);
+    $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
 }
 
 var run = function() {
@@ -85,6 +85,7 @@ var run = function() {
         maxLanguages = 9;
 
     var res = github_user(username, function(data) {
+        data = data.data;
         var since = new Date(data.created_at);
         since = since.getFullYear();
 
@@ -133,21 +134,21 @@ var run = function() {
             languages = {},
             popularity;
 
-        data.forEach(function(elm, i, arr) {
-            if (arr[i].fork !== false) {
+        $.each(data, function(i, repo) {
+            if (repo.fork !== false) {
                 return;
             }
 
-            if (arr[i].language) {
-                if (arr[i].language in languages) {
-                    languages[arr[i].language]++;
+            if (repo.language) {
+                if (repo.language in languages) {
+                    languages[repo.language]++;
                 } else {
-                    languages[arr[i].language] = 1;
+                    languages[repo.language] = 1;
                 }
             }
 
-            popularity = arr[i].watchers + arr[i].forks;
-            sorted.push({position: i, popularity: popularity, info: arr[i]});
+            popularity = repo.watchers + repo.forks;
+            sorted.push({position: i, popularity: popularity, info: repo});
         });
 
         function sortByPopularity(a, b) {
@@ -192,10 +193,10 @@ var run = function() {
                     var ul = $('<ul class="talent"></ul>'),
                         percent, li;
                     
-                    languages.forEach(function(elm, i, arr) {
+                    $.each(languages, function(i, lang) {
                         x = i + 1;
-                        percent = parseInt((arr[i].popularity / languageTotal) * 100);
-                        li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
+                        percent = parseInt((lang.popularity / languageTotal) * 100);
+                        li = $('<li>' + lang.toString() + ' ('+percent+'%)</li>');
                         
                         if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
                             li.attr('class', 'last');
@@ -216,14 +217,14 @@ var run = function() {
                     itemCount = 0;
                     var since, until, date, view, template, html;
                     
-                    sorted.forEach(function(elm, index, arr) {
+                    $.each(sorted, function(index, repo) {
                         if (itemCount >= maxItems) {
                             return;
                         }
 
-                        since = new Date(arr[index].info.created_at);
+                        since = new Date(repo.info.created_at);
                         since = since.getFullYear();
-                        until = new Date(arr[index].info.pushed_at);
+                        until = new Date(repo.info.pushed_at);
                         until = until.getFullYear();
                         if (since == until) {
                             date = since;
@@ -232,15 +233,15 @@ var run = function() {
                         }
 
                         view = {
-                            name: arr[index].info.name,
+                            name: repo.info.name,
                             date: date,
-                            language: arr[index].info.language,
-                            description: arr[index].info.description,
+                            language: repo.info.language,
+                            description: repo.info.description,
                             username: username,
-                            watchers: arr[index].info.watchers,
-                            forks: arr[index].info.forks,
-                            watchersLabel: arr[index].info.watchers > 1 ? 'watchers' : 'watcher',
-                            forksLabel: arr[index].info.forks > 1 ? 'forks' : 'fork',
+                            watchers: repo.info.watchers,
+                            forks: repo.info.forks,
+                            watchersLabel: repo.info.watchers > 1 ? 'watchers' : 'watcher',
+                            forksLabel: repo.info.forks > 1 ? 'forks' : 'fork',
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
@@ -260,14 +261,14 @@ var run = function() {
         });
     });
 
-    github_user_orgs(username, function(data) {
+    github_user_orgs(username, function(response) {
         var sorted = [];
 
-        data.forEach(function(elm, i, arr) {
-            if (arr[i].login === undefined) {
+        $.each(response.data, function(i, org) {
+            if (org.login === undefined) {
                 return;
             }
-            sorted.push({position: i, info: arr[i]});
+            sorted.push({position: i, info: org});
         });
 
         $.ajax({
@@ -281,11 +282,11 @@ var run = function() {
                     
                     var name, view, template, html;
                     
-                    sorted.forEach(function(elm, index, arr) {
+                    $.each(sorted, function(index, org) {
                         if (itemCount >= maxItems) {
                             return;
                         }
-                        name = (arr[index].info.name || arr[index].info.login);
+                        name = (org.info.name || org.info.login);
                         view = {
                             name: name,
                             now: now
