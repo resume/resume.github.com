@@ -1,0 +1,85 @@
+<div id="doc2" class="yui-t7">
+	<div id="inner">
+
+		<div id="hd">
+			<div class="yui-gc">
+				<div class="yui-u first">
+					<hgroup>
+						<h1>{{name}}</h1>
+						<h2>Github organization</h2>
+					</hgroup>
+				</div>
+
+				<div class="yui-u">
+					<div class="contact-info">
+						{{#gravatar_id}}
+						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt=""/>
+						{{/gravatar_id}}
+						{{#email}}<h3><a href="mailto:{{email}}">{{email}}</a></h3>{{/email}}
+					</div><!--// .contact-info -->
+				</div>
+			</div><!--// .yui-gc -->
+		</div><!--// hd -->
+
+		<div id="bd">
+			<div id="yui-main">
+				<div class="yui-b">
+
+					<div class="yui-gf">
+						<div class="yui-u first">
+							<h2>Github Profile</h2>
+						</div>
+						<div class="yui-u">
+							<p class="enlarge">
+								 We are XX developers gathered in a group
+								 {{#location}}
+								 based in {{location}}
+								 {{/location}}
+								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>.
+								 We've created this Github group in {{since}}{{#earlyAdopter}}, therefore I'm an early adopter,{{/earlyAdopter}}{{#blog}}&nbsp;and you can find more informations about us at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>{{/blog}}.
+							</p>
+							<p id="languages" class="enlarge"></p>
+						</div>
+					</div><!--// .yui-gf -->
+                    <div class="yui-gf" id="mylanguages"> 
+                        <div class="yui-u first">
+                            <h2>Languages</h2>
+                        </div>
+                        <div class="yui-u" id="content-languages">
+                            
+                        </div>
+                    </div>
+					<div class="yui-gf">
+						<div class="yui-u first">
+							<h2>Our Popular Repositories</h2>
+						</div><!--// .yui-u -->
+
+						<div class="yui-u" id="jobs">
+                            <span>Loading information...</span><img src="images/loader.gif" />
+						</div><!--// .yui-u -->
+					</div><!--// .yui-gf -->
+
+					<div class="yui-gf last">
+						<div class="yui-u first">
+							<h2>About This R&eacute;sum&eacute;</h2>
+						</div>
+						<div class="yui-u">
+							<p class="enlarge">
+								This r&eacute;sum&eacute; is generated automatically using information from github. The repositories are
+								ordered by popularity based on a very simple popularity heuristic that defines the popularity of a repository
+								by its sum of watchers and forks. Do not hesitate to visit <a href="https://github.com/{{{username}}}" title="My Github page">our github group's page</a>
+								for more information about our repositories and work.
+							</p>
+						</div>
+					</div><!--// .yui-gf -->
+				</div><!--// .yui-b -->
+			</div><!--// yui-main -->
+		</div><!--// bd -->
+
+		<div id="ft">
+			<p>{{name}} &mdash; {{#email}}<a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
+		</div><!--// footer -->
+
+	</div><!-- // inner -->
+
+</div><!--// doc -->

@@ -41,8 +41,9 @@
 								 {{#location}}
 								 based in <span class="adr locality">{{location}}</span>
 								 {{/location}}
-								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{#followers}}&nbsp;and {{followers}} {{followersLabel}}{{/followers}}.
-								 I've been using github.com since {{since}}{{#blog}}&nbsp;and sometimes I blog at <a href="{{blog}}" id="myblog" class="url" title="my blog">{{blog}}</a>{{/blog}}.
+								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and {{followers}} {{followersLabel}}{{/followers}}.
+								 I've been using github.com since {{since}}{{#earlyAdopter}}, therefore I'm an early adopter,{{/earlyAdopter}}
+								 {{#blog}}&nbsp;and sometimes I blog at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>.{{/blog}}
 							</p>
 							<p id="languages" class="enlarge"></p>
 						</div>
