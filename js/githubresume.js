@@ -110,7 +110,8 @@ var run = function() {
             followers: data.followers,
             followersLabel: data.followers > 1 ? 'followers' : 'follower',
             username: username,
-            since: since
+            since: since,
+            resume_url: window.location
         };
 
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
@@ -125,6 +126,10 @@ var run = function() {
                     html = Mustache.to_html(template, view);
                 $('#resume').html(html);
                 document.title = name + "'s Résumé";
+                $("#actions #print").click(function(){
+                    window.print();
+                    return false;
+                });
             }
         });
     });
@@ -175,11 +180,11 @@ var run = function() {
 
                 languageTotal += languages[lang];
             }
-            
+
             if (limit) {
                 sorted_languages = sorted_languages.slice(0, limit);
             }
-            
+
             return sorted_languages.sort(sortByPopularity);
         }
 
@@ -188,16 +193,16 @@ var run = function() {
             dataType: 'html',
             success: function(response) {
                 languages = sortLanguages(languages, maxLanguages);
-                
+
                 if (languages && languages.length > 0) {
                     var ul = $('<ul class="talent"></ul>'),
                         percent, li;
-                    
+
                     $.each(languages, function(i, lang) {
                         x = i + 1;
                         percent = parseInt((lang.popularity / languageTotal) * 100);
                         li = $('<li>' + lang.toString() + ' ('+percent+'%)</li>');
-                        
+
                         if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
                             li.attr('class', 'last');
                             ul.append(li);
@@ -216,7 +221,7 @@ var run = function() {
                     $('#jobs').html('');
                     itemCount = 0;
                     var since, until, date, view, template, html;
-                    
+
                     $.each(sorted, function(index, repo) {
                         if (itemCount >= maxItems) {
                             return;
@@ -279,9 +284,9 @@ var run = function() {
 
                 if (sorted.length > 0) {
                     $('#orgs').html('');
-                    
+
                     var name, view, template, html;
-                    
+
                     $.each(sorted, function(index, org) {
                         if (itemCount >= maxItems) {
                             return;

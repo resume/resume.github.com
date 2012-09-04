@@ -25,7 +25,7 @@
     border: 0;
 }
 
-.org p, 
+.org p,
 .job p {
     margin: 5pt 0 15pt;
 }
@@ -97,7 +97,7 @@ h1, h2, h3, h4 {
 /* =! Links */
 
 #profile a:after,
-#repositories a:after, 
+#repositories a:after,
 #about a:after {
     content: " (" attr(href) ")";
     font-style: italic;
@@ -115,6 +115,10 @@ a {
 #mylanguages a,
 #jobs p a {
     color: inherit;
+}
+
+#actions {
+    visibility: hidden;
 }
 
 /* --------- */
