@@ -86,8 +86,9 @@ var run = function() {
 
     var res = github_user(username, function(data) {
         data = data.data;
-        var since = new Date(data.created_at);
-        since = since.getFullYear();
+        var sinceDate = new Date(data.created_at);
+        since = sinceDate.getFullYear();
+        var sinceMonth = sinceDate.getMonth();
 
         var addHttp = '';
         if (data.blog && data.blog.indexOf('http') < 0) {
@@ -103,6 +104,7 @@ var run = function() {
             name: name,
             email: data.email,
             created_at: data.created_at,
+            earlyAdopter: 0,
             location: data.location,
             gravatar_id: data.gravatar_id,
             repos: data.public_repos,
@@ -110,10 +112,64 @@ var run = function() {
             followers: data.followers,
             followersLabel: data.followers > 1 ? 'followers' : 'follower',
             username: username,
+            userStatus: 'Github user',
             since: since,
             resume_url: window.location
         };
-
+        
+        // We consider a limit of 4 months since the Github opening (Feb 2008) to be considered as an early adopter
+        if (since == '2008' && sinceMonth <= 5) {
+            view.earlyAdopter = 1;
+        }
+		
+        view.userStatus = getUserStatus();
+        function getUserStatus() {
+            var COEF_REPOS = 2;
+            var COEF_GISTS = 0.25;
+            var COEF_FOLLOWERS = 0.5;
+            var COEF_FOLLOWING = 0.25;
+            var FIRST_STEP = 0;
+            var SECOND_STEP = 5;
+            var THIRD_STEP = 20;
+            var FOURTH_STEP = 50;
+            var FIFTH_STEP = 150;
+            var EXTRA_POINT_GAIN = 1;
+            
+            var statusScore = view.repos * COEF_REPOS 
+                            + data.public_repos * COEF_GISTS 
+                            + data.followers * COEF_FOLLOWERS 
+                            + data.following * COEF_FOLLOWING;
+            
+            // Extra points
+            // - Early adopter
+            if (view.earlyAdopter == 1) {
+                statusScore += EXTRA_POINT_GAIN;
+            }
+            // - Blog & Email & Location
+        	  if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
+        	    statusScore += EXTRA_POINT_GAIN;
+        	  }
+			
+            if (statusScore == FIRST_STEP) {
+              return 'Inactive Github user';
+            }
+            else if (statusScore > FIRST_STEP && statusScore <= SECOND_STEP) {
+              return 'Newbie Github user';
+            }
+            else if (statusScore > SECOND_STEP && statusScore <= THIRD_STEP) {
+              return 'Regular Github user';
+            }
+            else if (statusScore > THIRD_STEP && statusScore <= FOURTH_STEP) {
+              return 'Advanced Github user';
+            }
+            else if (statusScore > FOURTH_STEP && statusScore <= FIFTH_STEP) {
+              return 'Enthusiastic Github user';
+            }
+            else if (statusScore > FIFTH_STEP) {
+              return 'Passionate Github user';
+            }
+        };
+		
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
             view.blog = addHttp + data.blog;
         }
