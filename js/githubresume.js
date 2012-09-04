@@ -87,8 +87,18 @@ var run = function() {
     var res = github_user(username, function(data) {
         data = data.data;
         var sinceDate = new Date(data.created_at);
-        since = sinceDate.getFullYear();
         var sinceMonth = sinceDate.getMonth();
+        var since = sinceDate.getFullYear();
+        var sinceMonth = sinceDate.getMonth();
+        var currentYear = (new Date).getFullYear();
+        switch (since) {
+          case currentYear-1:
+            since = 'last year';
+            break;
+          case currentYear:
+            since = 'this year';
+            break;
+        }
 
         var addHttp = '';
         if (data.blog && data.blog.indexOf('http') < 0) {
@@ -112,12 +122,12 @@ var run = function() {
             followers: data.followers,
             followersLabel: data.followers > 1 ? 'followers' : 'follower',
             username: username,
-            userStatus: 'Github user',
+            userStatus: 'GitHub user',
             since: since,
             resume_url: window.location
         };
         
-        // We consider a limit of 4 months since the Github opening (Feb 2008) to be considered as an early adopter
+        // We consider a limit of 4 months since the GitHub opening (Feb 2008) to be considered as an early adopter
         if (since == '2008' && sinceMonth <= 5) {
             view.earlyAdopter = 1;
         }
@@ -151,22 +161,22 @@ var run = function() {
         	  }
 			
             if (statusScore == FIRST_STEP) {
-              return 'Inactive Github user';
+              return 'Inactive GitHub user';
             }
             else if (statusScore > FIRST_STEP && statusScore <= SECOND_STEP) {
-              return 'Newbie Github user';
+              return 'Newbie GitHub user';
             }
             else if (statusScore > SECOND_STEP && statusScore <= THIRD_STEP) {
-              return 'Regular Github user';
+              return 'Regular GitHub user';
             }
             else if (statusScore > THIRD_STEP && statusScore <= FOURTH_STEP) {
-              return 'Advanced Github user';
+              return 'Advanced GitHub user';
             }
             else if (statusScore > FOURTH_STEP && statusScore <= FIFTH_STEP) {
-              return 'Enthusiastic Github user';
+              return 'Enthusiastic GitHub user';
             }
             else if (statusScore > FIFTH_STEP) {
-              return 'Passionate Github user';
+              return 'Passionate GitHub user';
             }
         };
 		
