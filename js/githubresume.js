@@ -53,44 +53,68 @@ var home = function() {
     });
 };
 
+var github_user = function(username, callback) {
+    $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
+}
+
+var github_user_repos = function(username, callback, page_number, prev_data) {
+    var page = (page_number ? page_number : 1),
+        url = 'https://api.github.com/users/' + username + '/repos?callback=?',
+        data = (prev_data ? prev_data : []);
+
+    if (page_number > 1) {
+      url += '&page=' + page_number;
+    }
+    $.getJSON(url, function(repos) {
+        data = data.concat(repos.data);
+        if (repos.data.length > 0) {
+            github_user_repos(username, callback, page + 1, data);
+        } else {
+            callback(data);
+        }
+    });
+}
+
+var github_user_orgs = function(username, callback) {
+    $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
+}
+
 var run = function() {
+    var itemCount = 0,
+        maxItems = 5,
+        maxLanguages = 9;
 
-    var gh_user = gh.user(username);
-    var itemCount = 0, maxItems = 5, maxLanguages = 9;
-
-    var res = gh_user.show(function(data) {
-        gh_user.allRepos(function(data) {
-            repos = data;
-        });
-
-        var sinceDate = new Date(data.user.created_at);
+    var res = github_user(username, function(data) {
+        data = data.data;
+        var sinceDate = new Date(data.created_at);
         since = sinceDate.getFullYear();
         var sinceMonth = sinceDate.getMonth();
 
         var addHttp = '';
-        if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
-            if (data.user.blog.indexOf('http') < 0) {
-                addHttp = 'http://';
-            }
+        if (data.blog && data.blog.indexOf('http') < 0) {
+            addHttp = 'http://';
         }
 
         var name = username;
-        if (data.user.name !== null && data.user.name !== undefined) {
-            name = data.user.name;
+        if (data.name !== null && data.name !== undefined) {
+            name = data.name;
         }
 
         var view = {
             name: name,
-            email: data.user.email,
-            created_at: data.user.created_at,
+            email: data.email,
+            created_at: data.created_at,
             earlyAdopter: 0,
-            location: data.user.location,
-            gravatar_id: data.user.gravatar_id,
-            repos: data.user.public_repo_count,
-            plural: data.user.public_repo_count > 1 ? 'repositories' : 'repository',
+            location: data.location,
+            gravatar_id: data.gravatar_id,
+            repos: data.public_repos,
+            reposLabel: data.public_repos > 1 ? 'repositories' : 'repository',
+            followers: data.followers,
+            followersLabel: data.followers > 1 ? 'followers' : 'follower',
             username: username,
             userStatus: 'Github user',
-            since: since
+            since: since,
+            resume_url: window.location
         };
         
         // We consider a limit of 4 months since the Github opening (Feb 2008) to be considered as an early adopter
@@ -112,9 +136,9 @@ var run = function() {
             var EXTRA_POINT_GAIN = 1;
             
             var statusScore = view.repos * COEF_REPOS 
-                            + data.user.public_gist_count * COEF_GISTS 
-                            + data.user.followers_count * COEF_FOLLOWERS 
-                            + data.user.following_count * COEF_FOLLOWING;
+                            + data.public_repos * COEF_GISTS 
+                            + data.followers * COEF_FOLLOWERS 
+                            + data.following * COEF_FOLLOWING;
             
             // Extra points
             // - Early adopter
@@ -122,68 +146,70 @@ var run = function() {
                 statusScore += EXTRA_POINT_GAIN;
             }
             // - Blog & Email & Location
-        	if (view.location && view.location != '' && view.email && view.email != '' && data.user.blog && data.user.blog != '') {
+        	  if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
         	    statusScore += EXTRA_POINT_GAIN;
-        	}
-			
+        	  }
 			
             if (statusScore == FIRST_STEP) {
-                return 'Inactive Github user';
+              return 'Inactive Github user';
             }
             else if (statusScore > FIRST_STEP && statusScore <= SECOND_STEP) {
-                return 'Newbie Github user';
+              return 'Newbie Github user';
             }
             else if (statusScore > SECOND_STEP && statusScore <= THIRD_STEP) {
-                return 'Regular Github user';
+              return 'Regular Github user';
             }
             else if (statusScore > THIRD_STEP && statusScore <= FOURTH_STEP) {
-                return 'Advanced Github user';
+              return 'Advanced Github user';
             }
             else if (statusScore > FOURTH_STEP && statusScore <= FIFTH_STEP) {
-                return 'Enthusiastic Github user';
+              return 'Enthusiastic Github user';
             }
             else if (statusScore > FIFTH_STEP) {
-                return 'Passionate Github user';
+              return 'Passionate Github user';
             }
-		};
+        };
 		
-        if (data.user.blog !== undefined && data.user.blog !== null && data.user.blog !== '') {
-            view.blog = addHttp + data.user.blog;
+        if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
+            view.blog = addHttp + data.blog;
         }
 
         $.ajax({
             url: 'views/resume.html',
             dataType: 'html',
             success: function(data) {
-                var template = data;
-                var html = Mustache.to_html(template, view);
+                var template = data,
+                    html = Mustache.to_html(template, view);
                 $('#resume').html(html);
                 document.title = name + "'s Résumé";
+                $("#actions #print").click(function(){
+                    window.print();
+                    return false;
+                });
             }
         });
     });
 
-    gh_user.allRepos(function(data) {
-        var repos = data.repositories;
+    github_user_repos(username, function(data) {
+        var sorted = [],
+            languages = {},
+            popularity;
 
-        var sorted = [];
-        var languages = {};
-
-        repos.forEach(function(elm, i, arr) {
-            if (arr[i].fork !== false) {
+        $.each(data, function(i, repo) {
+            if (repo.fork !== false) {
                 return;
             }
-            
-            if (arr[i].language) {
-                if (arr[i].language in languages) {
-                    languages[arr[i].language]++;
+
+            if (repo.language) {
+                if (repo.language in languages) {
+                    languages[repo.language]++;
                 } else {
-                    languages[arr[i].language] = 1;
+                    languages[repo.language] = 1;
                 }
             }
 
-            var popularity = arr[i].watchers + arr[i].forks;
-            sorted.push({position: i, popularity: popularity, info: arr[i]});
+            popularity = repo.watchers + repo.forks;
+            sorted.push({position: i, popularity: popularity, info: repo});
         });
 
         function sortByPopularity(a, b) {
@@ -195,6 +221,7 @@ var run = function() {
         var languageTotal = 0;
         function sortLanguages(languages, limit) {
             var sorted_languages = [];
+
             for (var lang in languages) {
                 if (typeof(lang) !== "string") {
                     continue;
@@ -208,11 +235,12 @@ var run = function() {
                 });
 
                 languageTotal += languages[lang];
-
             }
+
             if (limit) {
                 sorted_languages = sorted_languages.slice(0, limit);
             }
+
             return sorted_languages.sort(sortByPopularity);
         }
 
@@ -220,15 +248,17 @@ var run = function() {
             url: 'views/job.html',
             dataType: 'html',
             success: function(response) {
-                var now = new Date().getFullYear();
                 languages = sortLanguages(languages, maxLanguages);
 
                 if (languages && languages.length > 0) {
-                    var ul = $('<ul class="talent"></ul>');
-                    languages.forEach(function(elm, i, arr) {
+                    var ul = $('<ul class="talent"></ul>'),
+                        percent, li;
+
+                    $.each(languages, function(i, lang) {
                         x = i + 1;
-                        var percent = parseInt((arr[i].popularity / languageTotal) * 100);
-                        var li = $('<li>' + arr[i].toString() + ' ('+percent+'%)</li>');
+                        percent = parseInt((lang.popularity / languageTotal) * 100);
+                        li = $('<li>' + lang.toString() + ' ('+percent+'%)</li>');
+
                         if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
                             li.attr('class', 'last');
                             ul.append(li);
@@ -246,54 +276,60 @@ var run = function() {
                 if (sorted.length > 0) {
                     $('#jobs').html('');
                     itemCount = 0;
-                    sorted.forEach(function(elm, index, arr) {
+                    var since, until, date, view, template, html;
+
+                    $.each(sorted, function(index, repo) {
                         if (itemCount >= maxItems) {
                             return;
                         }
 
-                        var since = new Date(arr[index].info.created_at);
+                        since = new Date(repo.info.created_at);
                         since = since.getFullYear();
+                        until = new Date(repo.info.pushed_at);
+                        until = until.getFullYear();
+                        if (since == until) {
+                            date = since;
+                        } else {
+                            date = since + ' - ' + until;
+                        }
 
-                        var view = {
-                            name: arr[index].info.name,
-                            since: since,
-                            now: now,
-                            language: arr[index].info.language,
-                            description: arr[index].info.description,
+                        view = {
+                            name: repo.info.name,
+                            date: date,
+                            language: repo.info.language,
+                            description: repo.info.description,
                             username: username,
-                            watchers: arr[index].info.watchers,
-                            forks: arr[index].info.forks
+                            watchers: repo.info.watchers,
+                            forks: repo.info.forks,
+                            watchersLabel: repo.info.watchers > 1 ? 'watchers' : 'watcher',
+                            forksLabel: repo.info.forks > 1 ? 'forks' : 'fork',
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
                             view.last = 'last';
                         }
 
-                        var template = response;
-                        var html = Mustache.to_html(template, view);
-
+                        template = response;
+                        html = Mustache.to_html(template, view);
 
                         $('#jobs').append($(html));
                         ++itemCount;
                     });
                 } else {
-                    $('#jobs').html('');
-                    $('#jobs').append('<p class="enlarge">I do not have any public repository. Sorry.</p>');
+                    $('#jobs').html('').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
                 }
             }
         });
     });
 
-    gh_user.orgs(function(data) {
-        var orgs = data.organizations;
-
+    github_user_orgs(username, function(response) {
         var sorted = [];
 
-        orgs.forEach(function(elm, i, arr) {
-            if (arr[i].name === undefined) {
+        $.each(response.data, function(i, org) {
+            if (org.login === undefined) {
                 return;
             }
-            sorted.push({position: i, info: arr[i]});
+            sorted.push({position: i, info: org});
         });
 
         $.ajax({
@@ -304,21 +340,24 @@ var run = function() {
 
                 if (sorted.length > 0) {
                     $('#orgs').html('');
-                    sorted.forEach(function(elm, index, arr) {
+
+                    var name, view, template, html;
+
+                    $.each(sorted, function(index, org) {
                         if (itemCount >= maxItems) {
                             return;
                         }
-                        var view = {
-                            name: arr[index].info.name,
-                            login: arr[index].info.login,
+                        name = (org.info.name || org.info.login);
+                        view = {
+                            name: name,
                             now: now
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems) {
                             view.last = 'last';
                         }
-                        var template = response;
-                        var html = Mustache.to_html(template, view);
+                        template = response;
+                        html = Mustache.to_html(template, view);
 
                         $('#orgs').append($(html));
                         ++itemCount;
