@@ -1,0 +1,124 @@
+/*
+    Print stylesheet for résumés
+*/
+
+
+/* =! Template */
+
+#doc2 {
+    width: 100%;
+}
+#inner {
+    margin: 0 auto;
+    padding: 10pt;
+    border: 0;
+}
+#hd {
+    margin-top: 0;
+}
+
+.enlarge {
+    padding-right: 0;
+}
+
+.talent li {
+    border: 0;
+}
+
+.org p,
+.job p {
+    margin: 5pt 0 15pt;
+}
+
+#repositories {
+    padding-bottom: 0;
+}
+
+#jobs h4 {
+    margin-top: 10pt;
+}
+
+#jobs .job,
+#about {
+    page-break-inside: avoid;
+}
+
+#bd,
+#about {
+    margin-bottom: 0;
+}
+
+#ft {
+    padding: 5pt 0;
+}
+
+/* --------- */
+
+
+
+/* =! Font */
+
+body {
+    font-size: 10pt;
+}
+
+#hd h1 {
+    font-size: 28pt;
+}
+#hd h2 {
+    font-size: 14pt;
+}
+
+#bd h2,
+#profile .enlarge,
+#about .enlarge {
+    font-size: 12pt;
+}
+
+/* --------- */
+
+
+
+/* =! Colors */
+
+body,
+h1, h2, h3, h4 {
+    color: #000;
+}
+
+#inner {
+    background: #fff;
+}
+
+/* --------- */
+
+
+
+/* =! Links */
+
+#profile a:after,
+#repositories a:after,
+#about a:after {
+    content: " (" attr(href) ")";
+    font-style: italic;
+    font-size: 10pt;
+}
+#profile #myblog:after,
+#jobs p a:after {
+    content: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+#mylanguages a,
+#jobs p a {
+    color: inherit;
+}
+
+#actions {
+    visibility: hidden;
+}
+
+/* --------- */
