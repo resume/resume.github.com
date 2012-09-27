@@ -110,13 +110,21 @@ var run = function() {
             name = data.name;
         }
 
+        var avatar = '';
+        if (data.type == 'Organization'){
+            avatar = data.avatar_url.match(/https:\/\/secure.gravatar.com\/avatar\/[0-9a-z]+/)[0];
+            avatar += '?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png';
+        }
+
         var view = {
             name: name,
+            type: data.type,
             email: data.email,
             created_at: data.created_at,
             earlyAdopter: 0,
             location: data.location,
             gravatar_id: data.gravatar_id,
+            avatar_url: avatar,
             repos: data.public_repos,
             reposLabel: data.public_repos > 1 ? 'repositories' : 'repository',
             followers: data.followers,
@@ -184,8 +192,9 @@ var run = function() {
             view.blog = addHttp + data.blog;
         }
 
+        var resume = (data.type == 'User' ? 'views/resume.html' : 'views/resumeOrgs.html');
         $.ajax({
-            url: 'views/resume.html',
+            url: resume,
             dataType: 'html',
             success: function(data) {
                 var template = data,
