@@ -320,8 +320,8 @@ var run = function() {
                             username: username,
                             watchers: repo.info.watchers,
                             forks: repo.info.forks,
-                            watchersLabel: repo.info.watchers > 1 ? 'watchers' : 'watcher',
-                            forksLabel: repo.info.forks > 1 ? 'forks' : 'fork',
+                            watchersLabel: repo.info.watchers == 0 || repo.info.watchers > 1 ? 'watchers' : 'watcher',
+                            forksLabel: repo.info.forks == 0 || repo.info.forks > 1 ? 'forks' : 'fork',
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
