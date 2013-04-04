@@ -296,7 +296,7 @@ var run = function() {
             if (Object.keys(contributions).length > 0) {
               $('#contrib-jobs').html('');
               $.each(contributions, function(htmlUrl, details) {
-                count = get_sync(details.parent.url + '/commits?author=' + username).length
+                count = get_sync(details.parent.url + '/commits?author=' + username + '&client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905').length
                 if (count > 0) {
                   view = {
                       commitsUrl: htmlUrl,
