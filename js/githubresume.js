@@ -54,12 +54,12 @@ var home = function() {
 };
 
 var github_user = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
+    $.getJSON('https://api.github.com/users/' + username + '?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905&callback=?', callback);
 }
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/users/' + username + '/repos?callback=?',
+        url = 'https://api.github.com/users/' + username + '/repos?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905&callback=?',
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
@@ -76,13 +76,13 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
 }
 
 var github_user_orgs = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
+    $.getJSON('https://api.github.com/users/' + username + '/orgs?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905&callback=?', callback);
 }
 
 var github_repo_details_sync = function(repo) {
   var result = undefined;
   $.ajax({
-      url: repo.url,
+      url: repo.url + '?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905',
       async: false,
       success: function(data) {
         result = data;
