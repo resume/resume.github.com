@@ -41,7 +41,7 @@
 								 {{#location}}
 								 based in <span class="adr locality">{{location}}</span>
 								 {{/location}}
-								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and {{followers}} {{followersLabel}}{{/followers}}.
+								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and <a href="https://github.com/{{{username}}}/followers">{{followers}} {{followersLabel}}</a> {{/followers}}.
 								 I've been using github.com since {{since}}{{#earlyAdopter}}, therefore I'm an early adopter,{{/earlyAdopter}}
 								 {{#blog}}&nbsp;and sometimes I blog at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>.{{/blog}}
 							</p>
@@ -62,6 +62,16 @@
 						</div><!--// .yui-u -->
 
 						<div class="yui-u" id="jobs">
+                            <span>Loading information...</span><img src="images/loader.gif" />
+						</div><!--// .yui-u -->
+					</div><!--// .yui-gf -->
+
+					<div id="contributions" class="yui-gf">
+						<div class="yui-u first">
+							<h2>My Contributions</h2>
+						</div><!--// .yui-u -->
+
+						<div class="yui-u" id="contrib-jobs">
                             <span>Loading information...</span><img src="images/loader.gif" />
 						</div><!--// .yui-u -->
 					</div><!--// .yui-gf -->

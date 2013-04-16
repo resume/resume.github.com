@@ -54,12 +54,12 @@ var home = function() {
 };
 
 var github_user = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
+    $.getJSON('https://api.github.com/users/' + username + '?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905&callback=?', callback);
 }
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/users/' + username + '/repos?callback=?',
+        url = 'https://api.github.com/users/' + username + '/repos?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905&callback=?',
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
@@ -76,7 +76,31 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
 }
 
 var github_user_orgs = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
+    $.getJSON('https://api.github.com/users/' + username + '/orgs?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905&callback=?', callback);
+}
+
+var github_repo_details_sync = function(repo) {
+  var result = undefined;
+  $.ajax({
+      url: repo.url + '?client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905',
+      async: false,
+      success: function(data) {
+        result = data;
+      }
+  });
+  return result;
+}
+
+var get_sync = function(url) {
+  var result = undefined;
+  $.ajax({
+      url: url,
+      async: false,
+      success: function(data) {
+        result = data;
+      }
+  });
+  return result;
 }
 
 var run = function() {
@@ -110,13 +134,21 @@ var run = function() {
             name = data.name;
         }
 
+        var avatar = '';
+        if (data.type == 'Organization'){
+            avatar = data.avatar_url.match(/https:\/\/secure.gravatar.com\/avatar\/[0-9a-z]+/)[0];
+            avatar += '?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png';
+        }
+
         var view = {
             name: name,
+            type: data.type,
             email: data.email,
             created_at: data.created_at,
             earlyAdopter: 0,
             location: data.location,
             gravatar_id: data.gravatar_id,
+            avatar_url: avatar,
             repos: data.public_repos,
             reposLabel: data.public_repos > 1 ? 'repositories' : 'repository',
             followers: data.followers,
@@ -126,12 +158,12 @@ var run = function() {
             since: since,
             resume_url: window.location
         };
-        
+
         // We consider a limit of 4 months since the GitHub opening (Feb 2008) to be considered as an early adopter
         if (since == '2008' && sinceMonth <= 5) {
             view.earlyAdopter = 1;
         }
-		
+
         view.userStatus = getUserStatus();
         function getUserStatus() {
             var COEF_REPOS = 2;
@@ -144,12 +176,12 @@ var run = function() {
             var FOURTH_STEP = 50;
             var FIFTH_STEP = 150;
             var EXTRA_POINT_GAIN = 1;
-            
-            var statusScore = view.repos * COEF_REPOS 
-                            + data.public_repos * COEF_GISTS 
-                            + data.followers * COEF_FOLLOWERS 
+
+            var statusScore = view.repos * COEF_REPOS
+                            + data.public_repos * COEF_GISTS
+                            + data.followers * COEF_FOLLOWERS
                             + data.following * COEF_FOLLOWING;
-            
+
             // Extra points
             // - Early adopter
             if (view.earlyAdopter == 1) {
@@ -159,7 +191,7 @@ var run = function() {
         	  if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
         	    statusScore += EXTRA_POINT_GAIN;
         	  }
-			
+
             if (statusScore == FIRST_STEP) {
               return 'Inactive GitHub user';
             }
@@ -179,13 +211,14 @@ var run = function() {
               return 'Passionate GitHub user';
             }
         };
-		
+
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
             view.blog = addHttp + data.blog;
         }
 
+        var resume = (data.type == 'User' ? 'views/resume.html' : 'views/resumeOrgs.html');
         $.ajax({
-            url: 'views/resume.html',
+            url: resume,
             dataType: 'html',
             success: function(data) {
                 var template = data,
@@ -203,23 +236,25 @@ var run = function() {
     github_user_repos(username, function(data) {
         var sorted = [],
             languages = {},
+            contributions = {},
             popularity;
 
         $.each(data, function(i, repo) {
             if (repo.fork !== false) {
-                return;
-            }
+              details = github_repo_details_sync(repo);
+              contributions[details.parent.html_url + '/commits?author=' + username] = details;
+            } else {
+              if (repo.language) {
+                  if (repo.language in languages) {
+                      languages[repo.language]++;
+                  } else {
+                      languages[repo.language] = 1;
+                  }
+              }
 
-            if (repo.language) {
-                if (repo.language in languages) {
-                    languages[repo.language]++;
-                } else {
-                    languages[repo.language] = 1;
-                }
+              popularity = repo.watchers + repo.forks;
+              sorted.push({position: i, popularity: popularity, info: repo});
             }
-
-            popularity = repo.watchers + repo.forks;
-            sorted.push({position: i, popularity: popularity, info: repo});
         });
 
         function sortByPopularity(a, b) {
@@ -253,6 +288,33 @@ var run = function() {
 
             return sorted_languages.sort(sortByPopularity);
         }
+
+        $.ajax({
+          url: 'views/contrib.html',
+          dataType: 'html',
+          success: function(response) {
+            if (Object.keys(contributions).length > 0) {
+              $('#contrib-jobs').html('');
+              $.each(contributions, function(htmlUrl, details) {
+                count = get_sync(details.parent.url + '/commits?author=' + username + '&client_id=9774d6e6f07dc0e07cbd&client_secret=18c45c6485d70e44b7c748fb8d1d7013824f2905').length
+                if (count > 0) {
+                  view = {
+                      commitsUrl: htmlUrl,
+                      repoName: details.parent.full_name,
+                      count: count,
+                      description: details.parent.description,
+                      repoUrl: details.parent.html_url,
+                      username: username
+                  };
+
+                  template = response;
+                  html = Mustache.to_html(template, view);
+                  $('#contrib-jobs').append($(html));
+                }
+              });
+            }
+          }
+        });
 
         $.ajax({
             url: 'views/job.html',
@@ -311,8 +373,8 @@ var run = function() {
                             username: username,
                             watchers: repo.info.watchers,
                             forks: repo.info.forks,
-                            watchersLabel: repo.info.watchers > 1 ? 'watchers' : 'watcher',
-                            forksLabel: repo.info.forks > 1 ? 'forks' : 'fork',
+                            watchersLabel: repo.info.watchers == 0 || repo.info.watchers > 1 ? 'watchers' : 'watcher',
+                            forksLabel: repo.info.forks == 0 || repo.info.forks > 1 ? 'forks' : 'fork',
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
