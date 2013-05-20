@@ -1,6 +1,6 @@
 <div id="actions" class="yui-t7">
 	<a href="#" id="print">Print</a>
-	<a target='none' href="mailto:?subject=Resume for {{name}}&body=Link to resume: {{resume_url}}" id="email">Email</a>
+	<a href="mailto:?subject=Resume for {{name}}&body=Link to resume: {{resume_url}}" id="email">Email</a>
 </div>
 
 <div id="doc2" class="yui-t7">
@@ -10,16 +10,14 @@
 		<div id="hd">
 			<div class="yui-gc">
 				<div class="yui-u first">
-					<hgroup>
-						<h1 class="fn">{{name}}</h1>
-						<h2>{{userStatus}}</h2>
-					</hgroup>
+					<h1 class="fn">{{name}}</h1>
+					<h2>{{userStatus}}</h2>
 				</div>
 
 				<div class="yui-u">
 					<div class="contact-info">
 						{{#gravatar_id}}
-						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt="" class="photo" />
+						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt="avatar" class="photo" />
 						{{/gravatar_id}}
 						{{#email}}<h3><a href="mailto:{{email}}" class="email">{{email}}</a></h3>{{/email}}
 					</div><!--// .contact-info -->
@@ -41,7 +39,7 @@
 								 {{#location}}
 								 based in <span class="adr locality">{{location}}</span>
 								 {{/location}}
-								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and {{followers}} {{followersLabel}}{{/followers}}.
+								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and <a href="https://github.com/{{{username}}}/followers">{{followers}} {{followersLabel}}</a>{{/followers}}.
 								 I've been using github.com since {{since}}{{#earlyAdopter}}, therefore I'm an early adopter,{{/earlyAdopter}}
 								 {{#blog}}&nbsp;and sometimes I blog at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>.{{/blog}}
 							</p>
