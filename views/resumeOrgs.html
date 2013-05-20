@@ -13,7 +13,7 @@
 				<div class="yui-u">
 					<div class="contact-info">
 						{{#gravatar_id}}
-						<img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt=""/>
+						<img src="{{avatar_url}}" alt="avatar" class="photo"/>
 						{{/gravatar_id}}
 						{{#email}}<h3><a href="mailto:{{email}}">{{email}}</a></h3>{{/email}}
 					</div><!--// .contact-info -->
@@ -31,12 +31,15 @@
 						</div>
 						<div class="yui-u">
 							<p class="enlarge">
-								 We are XX developers gathered in a group
+								 We are a developers gathered in a group
 								 {{#location}}
 								 based in {{location}}
 								 {{/location}}
-								 with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>.
-								 We've created this Github group in {{since}}{{#earlyAdopter}}, therefore I'm an early adopter,{{/earlyAdopter}}{{#blog}}&nbsp;and you can find more informations about us at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>{{/blog}}.
+								 {{#repos}} 
+                 with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>
+                 {{/repos}}
+                 {{#followers}}&nbsp;and <a href="https://github.com/{{{username}}}/followers">{{followers}} {{followersLabel}}</a>{{/followers}}.
+								 We've created this Github group in {{since}}{{#blog}}&nbsp;and you can find more informations about us at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>{{/blog}}.
 							</p>
 							<p id="languages" class="enlarge"></p>
 						</div>
