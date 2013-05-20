@@ -153,8 +153,8 @@ var run = function() {
             var FIFTH_STEP = 150;
             var EXTRA_POINT_GAIN = 1;
             
-            var statusScore = view.repos * COEF_REPOS 
-                            + data.public_repos * COEF_GISTS 
+            var statusScore = data.public_repos * COEF_REPOS 
+                            + data.public_gists * COEF_GISTS 
                             + data.followers * COEF_FOLLOWERS 
                             + data.following * COEF_FOLLOWING;
             
