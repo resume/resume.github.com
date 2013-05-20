@@ -1,6 +1,6 @@
 <div id="actions" class="yui-t7">
 	<a href="#" id="print">Print</a>
-	<a target='none' href="mailto:?subject=Resume for {{name}}&body=Link to resume: {{resume_url}}" id="email">Email</a>
+	{{#email}}<a target='none' href="mailto:?subject=Resume for {{name}}&body=Link to resume: {{resume_url}}" id="email">Email</a>{{/email}}
 </div>
 
 <div id="doc2" class="yui-t7">
@@ -41,7 +41,7 @@
 								 {{#location}}
 								 based in <span class="adr locality">{{location}}</span>
 								 {{/location}}
-								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and {{followers}} {{followersLabel}}{{/followers}}.
+								 {{#repos}}with <a href="https://github.com/{{{username}}}">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and <a href="https://github.com/{{{username}}}/followers">{{followers}} {{followersLabel}}</a> {{/followers}}.
 								 I've been using github.com since {{since}}{{#earlyAdopter}}, therefore I'm an early adopter,{{/earlyAdopter}}
 								 {{#blog}}&nbsp;and sometimes I blog at <a href="{{blog}}" id="myblog" title="my blog">{{blog}}</a>.{{/blog}}
 							</p>
