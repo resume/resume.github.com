@@ -136,7 +136,7 @@ var run = function() {
         };
         
         // We consider a limit of 4 months since the GitHub opening (Feb 2008) to be considered as an early adopter
-        if (since == '2008' && sinceMonth <= 5) {
+        if ((since == '2008' && sinceMonth <= 5) || since <= '2007') {
             view.earlyAdopter = 1;
         }
 		
