@@ -12,5 +12,6 @@ var githubresume_opt_out_users = [
     "listrophy",
     "jcoglan",
     "nrb",
-    "drtortoise"
+    "drtortoise",
+    "gregkare"
 ];
