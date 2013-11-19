@@ -4,5 +4,6 @@ var githubresume_opt_out_users = [
     "ntlk",
     "raganwald",
     "iamdanw",
-    "iamdanw_ms"
+    "iamdanw_ms",
+    "davw"
 ];
