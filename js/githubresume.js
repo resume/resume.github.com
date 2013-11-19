@@ -53,6 +53,27 @@ var home = function() {
     });
 };
 
+var opted_out = function(username) {
+    var opted_out = false;
+
+    if (githubresume_opt_out_users.indexOf(username) >= 0) {
+        opted_out = true;
+    } else {
+        $.ajax({
+            type: 'HEAD',
+            async: false,
+            url: 'https://api.github.com/repos/' + username + '/.optout',
+            statusCode: {
+                200: function(data) {
+                    opted_out = true;
+                }
+            }
+        });
+    }
+
+    return opted_out;
+}
+
 var github_user = function(username, callback) {
     $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
 }
@@ -84,7 +105,7 @@ var run = function() {
         maxItems = 5,
         maxLanguages = 9;
 
-    if (githubresume_opt_out_users.indexOf(username) >= 0) {
+    if (opted_out(username)) {
         $.ajax({
             url: 'views/opt_out.html',
             dataType: 'html',
