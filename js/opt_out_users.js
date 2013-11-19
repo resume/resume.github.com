@@ -24,5 +24,6 @@ var githubresume_opt_out_users = [
     "dominic",
     "alex",
     "nikhilsrinivasan",
-    "jnoller"
+    "jnoller",
+    "juliepagano"
 ];
