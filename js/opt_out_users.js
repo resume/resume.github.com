@@ -3,6 +3,7 @@ var githubresume_opt_out_users = [
     "kmcallister",
     "ntlk",
     "raganwald",
+    "puffnfresh",
     "iamdanw",
     "iamdanw_ms",
     "igalic",
