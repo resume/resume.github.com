@@ -84,6 +84,18 @@ var run = function() {
         maxItems = 5,
         maxLanguages = 9;
 
+    if (githubresume_opt_out_users.indexOf(username) >= 0) {
+        $.ajax({
+            url: 'views/opt_out.html',
+            dataType: 'html',
+            success: function(data) {
+                var template = data;
+                $('#resume').html(data);
+            }
+        });
+        return;
+    }
+
     var res = github_user(username, function(data) {
         data = data.data;
         var sinceDate = new Date(data.created_at);
