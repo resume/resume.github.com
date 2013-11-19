@@ -27,6 +27,7 @@ var githubresume_opt_out_users = [
     "nikhilsrinivasan",
     "jnoller",
     "remarkablerocket",
+    "bitprophet",
     // Bigger batch until #117
     "catsby", "kennethlove", "danimal", "dreid", "lacion", "jezdez", "smoynes", "justinabrahms", 
     "fcurella", "binarydud", "dmpayton", "retro", "acdha", "pydanny", "nibrahim", "juliepagano"
