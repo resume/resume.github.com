@@ -31,5 +31,6 @@ var githubresume_opt_out_users = [
     "brianvh,"
     // Bigger batch until #117
     "catsby", "kennethlove", "danimal", "dreid", "lacion", "jezdez", "smoynes", "justinabrahms", 
-    "fcurella", "binarydud", "dmpayton", "retro", "acdha", "pydanny", "nibrahim", "juliepagano"
+    "fcurella", "binarydud", "dmpayton", "retro", "acdha", "pydanny", "nibrahim", "juliepagano",
+    "tpherndon"
 ];
