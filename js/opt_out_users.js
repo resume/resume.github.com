@@ -15,5 +15,12 @@ var githubresume_opt_out_users = [
     "drtortoise",
     "gregkare",
     "eee-c",
-    "jacobian"
+    "jacobian",
+    "davidstanley01",
+    "brianhicks",
+    "jacknagel",
+    "pnasrat",
+    "wraithan",
+    "dominic",
+    "alex"
 ];
