@@ -24,6 +24,7 @@ var githubresume_opt_out_users = [
     "wraithan",
     "dominic",
     "alex",
+    "justinabrahms",
     "nikhilsrinivasan",
     "jnoller",
     // Bigger batch until #117
