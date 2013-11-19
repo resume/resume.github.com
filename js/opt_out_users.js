@@ -16,4 +16,5 @@ var githubresume_opt_out_users = [
     "gregkare",
     "eee-c",
     "jacobian"
+    "jnoller"
 ];
