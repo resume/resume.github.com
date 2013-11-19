@@ -22,5 +22,7 @@ var githubresume_opt_out_users = [
     "pnasrat",
     "wraithan",
     "dominic",
-    "alex"
+    "alex",
+    "nikhilsrinivasan",
+    "jnoller"
 ];
