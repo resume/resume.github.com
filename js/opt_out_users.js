@@ -9,5 +9,7 @@ var githubresume_opt_out_users = [
     "evilchili",
     "jsfernandes",
     "davw",
-    "listrophy"
+    "listrophy",
+    "jcoglan",
+    "drtortoise"
 ];
