@@ -6,5 +6,7 @@ var githubresume_opt_out_users = [
     "iamdanw",
     "iamdanw_ms",
     "mattfield", //"https://twitter.com/mattfieldy/status/402432266208821248"
-    "evilchili"
+    "evilchili",
+    "jsfernandes",
+    "davw"
 ];
