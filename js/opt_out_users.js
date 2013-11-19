@@ -1,4 +1,5 @@
 var githubresume_opt_out_users = [
+    "jimpanic",
     "augustl",
     "kmcallister",
     "ntlk",
