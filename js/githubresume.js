@@ -84,7 +84,7 @@ var run = function() {
         maxItems = 5,
         maxLanguages = 9;
 
-    if (githubresume_opt_out_users.indexOf(username) >= 0) {
+    if (!githubresume_opt_in_users.indexOf(username) >= 0) {
         $.ajax({
             url: 'views/opt_out.html',
             dataType: 'html',
