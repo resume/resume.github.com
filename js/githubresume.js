@@ -79,12 +79,36 @@ var github_user_orgs = function(username, callback) {
     $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
 }
 
+var github_user_stars = function(username) {
+    var repos = [];
+    $.ajax({
+        url: 'https://api.github.com/users/' + username + '/starred',
+        async: false,
+        dataType: 'json',
+        success: function(json) {
+            repos = json;
+        }
+    });
+    return repos;
+}
+
+var github_user_starred_resume = function(username) {
+    var starred = false;
+    var repos = github_user_stars(username);
+    $.each(repos, function(i, repo) {
+        if (repo.full_name == "resume/resume.github.com") {
+            starred = true;
+        }           
+    });
+    return starred;
+}
+
 var run = function() {
     var itemCount = 0,
         maxItems = 5,
         maxLanguages = 9;
 
-    if (githubresume_opt_out_users.indexOf(username) >= 0) {
+    if (! github_user_starred_resume(username)) {
         $.ajax({
             url: 'views/opt_out.html',
             dataType: 'html',
