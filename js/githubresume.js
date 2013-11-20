@@ -98,7 +98,8 @@ var github_user_starred_resume = function(username) {
     $.each(repos, function(i, repo) {
         if (repo.full_name == "resume/resume.github.com") {
             starred = true;
-        }           
+            return false; // stop iterating
+        }
     });
     return starred;
 }
