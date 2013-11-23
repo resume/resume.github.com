@@ -333,6 +333,13 @@ noscript {
   .first h2, .first h1{
     padding-left: 0.5em;
   }
+
+  .yui-gf div.first {
+    width: 20%;
+  }
+
+  .yui-gf .yui-u {  width: 80% }
+
 }
 
 @media screen and (min-width: 60em) {
