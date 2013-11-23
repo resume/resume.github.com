@@ -40,15 +40,6 @@ body {
   color: #444;
 }
 
-#inner {
-  padding: 10px 80px;
-  margin: 0 auto;
-  background: #f5f5f5;
-  border: solid #666;
-  border-width: 8px 0 2px 0;
-  box-shadow: 0 1px 3px #000;
-}
-
 .yui-gf {
   margin-bottom: 2em;
   padding-bottom: 2em;
@@ -66,7 +57,7 @@ body {
   padding-bottom: 1.5em;
   border-bottom: 1px solid #ccc;
 }
-
+ 
 #hd h1 {
   font-size: 48px;
   text-transform: uppercase;
@@ -285,3 +276,72 @@ noscript {
 }
 
 #doc2 {  padding-bottom: 70px }
+
+@media screen and (max-width: 59.9em) {
+  #inner {
+    padding: 5 5 5 5; 
+    margin: 0 auto;
+    background: #f5f5f5;
+    border: solid #666;
+    border-width: 8px 0 2px 0;
+    box-shadow: 0 1px 3px #000;  
+  } 
+  #hd h1 {
+    font-size: 2.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  #hd h2 {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  #doc2 {
+    width: 100%;
+    padding-bottom: 1em;
+  }
+  #actions{
+    display: none;
+  }
+
+  h1{
+    font-size: 2em;
+  }
+  h2{
+    font-size: 1.5em;
+  }
+  p.enlarge {
+    font-size: 1.4em;
+    line-height: 1.2em;
+  }
+  li {
+    line-height: 1.6em;
+  }
+  h3, h4{
+    font-size: 1.3em;
+  }
+  p{
+    font-size: 1.2em;
+    line-height: 1.1em;
+  }
+  .org p, .job p {
+    margin: 0.75em 0 1.5em 0;
+  }
+  .first h2, .first h1{
+    padding-left: 0.5em;
+  }
+}
+
+@media screen and (min-width: 60em) {
+  #inner {
+    padding: 10px 80px;
+    margin: 0 auto;
+    background: #f5f5f5;
+    border: solid #666;
+    border-width: 8px 0 2px 0;
+    box-shadow: 0 1px 3px #000;
+  }
+}
