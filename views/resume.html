@@ -35,16 +35,24 @@
 						</div>
 						<div class="yui-u">
 							<p class="enlarge">
-								 {{name}} is a developer
+								 On GitHub {{#earlyAdopter}}as an early adopter {{/earlyAdopter}} since {{since}}, {{name}} is a developer
 								 {{#location}}
 								 based in <span class="adr locality">{{location}}</span>
 								 {{/location}}
 								 {{#repos}}with <a href="https://github.com/{{{username}}}?tab=repositories">{{repos}} public {{reposLabel}}</a>{{/repos}}{{^repos}}without any public repository for now{{/repos}}{{#followers}}&nbsp;and <a href="https://github.com/{{{username}}}/followers">{{followers}} {{followersLabel}}</a>{{/followers}}.
-								 They've been using github.com since {{since}}{{#earlyAdopter}}, therefore are an early adopter{{/earlyAdopter}}{{#blog}}, and sometimes they blog at <a href="{{blog}}" id="myblog" title="their blog">{{blog}}</a>{{/blog}}.
 							</p>
-							<p id="languages" class="enlarge"></p>
 						</div>
 					</div><!--// .yui-gf -->
+					{{#blog}}
+					<div class="yui-gf" id="myblog">
+						<div class="yui-u first">
+							<h2>Blog</h2>
+						</div>
+						<div class="yui-u" id="content-blog">
+							<a href="{{blog}}" id="myblog" title="{{name}}'s blog">{{blog}}</a>
+						</div>
+					</div>
+					{{/blog}}
                     <div class="yui-gf" id="mylanguages">
                         <div class="yui-u first">
                             <h2>Languages</h2>
@@ -79,10 +87,10 @@
 						</div>
 						<div class="yui-u">
 							<p class="enlarge">
-								This r&eacute;sum&eacute; is generated automatically using public information from the developer's github account. The repositories are
+								This r&eacute;sum&eacute; is generated automatically using public information from the developer's GitHub account. The repositories are
 								ordered by popularity based on a very simple popularity heuristic that defines the popularity of a repository
-								by its sum of watchers and forks. Do not hesitate to visit <a href="https://github.com/{{{username}}}" title="Their GitHub page">their github page</a>
-								for more information about their repositories and work.
+								by its sum of watchers and forks. Do not hesitate to visit <a href="https://github.com/{{{username}}}" title="{{name}}'s GitHub page">{{name}}'s GitHub page</a>
+								for a complete work history.
 							</p>
 						</div>
 					</div><!--// .yui-gf -->
