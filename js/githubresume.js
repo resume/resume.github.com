@@ -372,7 +372,11 @@ var run = function() {
                         ++itemCount;
                     });
                 } else {
-                    $('#jobs').html('').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
+                    if(data.length > 0){
+                      $('#jobs').html('').append('<p class="enlarge">All my repositories are forks. Sorry.</p>');
+                    } else {
+                      $('#jobs').html('').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
+                    }
                 }
             }
         });
