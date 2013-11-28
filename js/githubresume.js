@@ -373,9 +373,9 @@ var run = function() {
                     });
                 } else {
                     if(data.length > 0){
-                      $('#jobs').html('').append('<p class="enlarge">All my repositories are forks. Sorry.</p>');
+                      $('#jobs').html('').append('<p class="enlarge">All of this user\'s repositories seem to be forks. Sorry.</p>');
                     } else {
-                      $('#jobs').html('').append('<p class="enlarge">I do not have any public repositories. Sorry.</p>');
+                      $('#jobs').html('').append('<p class="enlarge">Unfortunately, this user does not seem to have any <strong>public</strong> repositories.</p>');
                     }
                 }
             }
