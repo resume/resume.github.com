@@ -169,6 +169,11 @@ p.enlarge {
   border-bottom: 1px solid #ccc;
 }
 
+.org h3,
+.job h3 {
+  font-size: 100%;
+}
+
 .org h4,
 .job h4 {
   position: absolute;
@@ -183,7 +188,10 @@ p.enlarge {
 }
 
 .org p,
-.job p {  margin: 0.75em 0 3em 0 }
+.job p {  
+  margin: 0.75em 0 3em 0;
+  font-size: 122%; 
+}
 
 .last {  border: none }
 
