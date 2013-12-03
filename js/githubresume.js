@@ -143,7 +143,8 @@ var run = function() {
         }
 
         var name = username;
-        if (data.name !== null && data.name !== undefined) {
+        // XXX is this ever anything other than an empty string?
+        if (data.name !== null && data.name !== undefined && data.name.length) {
             name = data.name;
         }
 
