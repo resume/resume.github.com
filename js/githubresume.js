@@ -143,7 +143,8 @@ var run = function() {
         }
 
         var name = username;
-        if (data.name !== null && data.name !== undefined) {
+        // data.name is an empty string if the user's username is the same as their GitHub login name
+        if (data.name !== null && data.name !== undefined && data.name.length) {
             name = data.name;
         }
 
