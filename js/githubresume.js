@@ -143,7 +143,7 @@ var run = function() {
         }
 
         var name = username;
-        // XXX is this ever anything other than an empty string?
+        // data.name is an empty string if the user's username is the same as their GitHub login name
         if (data.name !== null && data.name !== undefined && data.name.length) {
             name = data.name;
         }
