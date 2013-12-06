@@ -142,8 +142,11 @@ var run = function() {
             addHttp = 'http://';
         }
 
+        // set view.name to the "friendly" name e.g. "John Doe". If not defined
+        // (in which case data.name is empty), fall back to the login
+        // name e.g. "johndoe"
         var name = username;
-        if (data.name !== null && data.name !== undefined) {
+        if (data.name !== null && data.name !== undefined && data.name.length) {
             name = data.name;
         }
 
