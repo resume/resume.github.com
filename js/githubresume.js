@@ -87,6 +87,7 @@ var github_user_starred_resume = function(username, page) {
     var repos = [];
     var page  = (page ? page : 1);
     var url   = 'https://api.github.com/users/' + username + '/starred?page=' + page;
+    var errorMsg;
 
     $.ajax({
         url: url,
@@ -97,15 +98,15 @@ var github_user_starred_resume = function(username, page) {
         },
         error: function(e) {
             if (e.status == 403) {
-                repos = 'api_limit'
+                errorMsg = 'api_limit'
             } else if (e.status == 404) {
-                repos = 'not_found'
+                errorMsg = 'not_found'
             }
         }
     });
 
-    if (repos === 'api_limit' || repos === 'not_found') {
-        return repos;
+    if (errorMsg === 'api_limit' || errorMsg === 'not_found') {
+        return errorMsg;
     }
 
     $.each(repos, function(i, repo) {
