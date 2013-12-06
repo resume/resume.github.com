@@ -79,29 +79,40 @@ var github_user_orgs = function(username, callback) {
     $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
 }
 
-var github_user_stars = function(username) {
+// Check to see if the user has starred the resume.github.com repo.
+//
+// Returns true/false.
+var github_user_starred_resume = function(username, page) {
+    var star  = false;
     var repos = [];
+    var page  = (page ? page : 1);
+    var url   = 'https://api.github.com/users/' + username + '/starred?page=' + page;
+
     $.ajax({
-        url: 'https://api.github.com/users/' + username + '/starred',
+        url: url,
         async: false,
         dataType: 'json',
-        success: function(json) {
-            repos = json;
+        success: function(data) {
+            repos = data;
         }
     });
-    return repos;
-}
 
-var github_user_starred_resume = function(username) {
-    var starred = false;
-    var repos = github_user_stars(username);
     $.each(repos, function(i, repo) {
         if (repo.full_name == "resume/resume.github.com") {
-            starred = true;
+            star = true;
             return false; // stop iterating
         }
     });
-    return starred;
+
+    if (star) {
+        return star;
+    }
+
+    if (repos.length > 0) {
+        star = github_user_starred_resume(username, page + 1);
+    }
+
+    return star;
 }
 
 var run = function() {
