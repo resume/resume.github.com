@@ -229,7 +229,7 @@ var run = function() {
         };
 		
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
-            view.blog = addHttp + data.blog;
+            view.website = addHttp + data.blog;
         }
 
         var resume = (data.type == 'User' ? 'views/resume.html' : 'views/resumeOrgs.html');
