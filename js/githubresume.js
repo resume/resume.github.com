@@ -94,8 +94,17 @@ var github_user_starred_resume = function(username, page) {
         dataType: 'json',
         success: function(data) {
             repos = data;
+        },
+        error: function(e) {
+            if (e.status == 403) {
+                repos = 'api_limit'
+            }
         }
     });
+
+    if (repos === 'api_limit') {
+        return repos;
+    }
 
     $.each(repos, function(i, repo) {
         if (repo.full_name == "resume/resume.github.com") {
@@ -118,17 +127,29 @@ var github_user_starred_resume = function(username, page) {
 var run = function() {
     var itemCount = 0,
         maxItems = 5,
-        maxLanguages = 9;
+        maxLanguages = 9,
+        starred = github_user_starred_resume(username);
 
-    if (! github_user_starred_resume(username)) {
-        $.ajax({
-            url: 'views/opt_out.html',
-            dataType: 'html',
-            success: function(data) {
-                var template = data;
-                $('#resume').html(data);
-            }
-        });
+    if (! starred || starred === 'api_limit') {
+        if (starred === 'api_limit') {
+            $.ajax({
+                url: 'views/api_limit.html',
+                dataType: 'html',
+                success: function(data) {
+                    var template = data;
+                    $('#resume').html(data);
+                }
+            });
+        } else {
+            $.ajax({
+                url: 'views/opt_out.html',
+                dataType: 'html',
+                success: function(data) {
+                    var template = data;
+                    $('#resume').html(data);
+                }
+            });
+        }
         return;
     }
 
