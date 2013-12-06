@@ -98,11 +98,13 @@ var github_user_starred_resume = function(username, page) {
         error: function(e) {
             if (e.status == 403) {
                 repos = 'api_limit'
+            } else if (e.status == 404) {
+                repos = 'not_found'
             }
         }
     });
 
-    if (repos === 'api_limit') {
+    if (repos === 'api_limit' || repos === 'not_found') {
         return repos;
     }
 
@@ -130,10 +132,19 @@ var run = function() {
         maxLanguages = 9,
         starred = github_user_starred_resume(username);
 
-    if (! starred || starred === 'api_limit') {
+    if (! starred || starred === 'api_limit' || starred === 'not_found') {
         if (starred === 'api_limit') {
             $.ajax({
                 url: 'views/api_limit.html',
+                dataType: 'html',
+                success: function(data) {
+                    var template = data;
+                    $('#resume').html(data);
+                }
+            });
+        } else if (starred === 'not_found') {
+            $.ajax({
+                url: 'views/not_found.html',
                 dataType: 'html',
                 success: function(data) {
                     var template = data;
