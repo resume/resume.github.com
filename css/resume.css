@@ -52,34 +52,34 @@ body {
 
 /* //-- header, body, footer -- */
 
-#hd {
+header {
   margin: 2.5em 0 3em 0;
   padding-bottom: 1.5em;
   border-bottom: 1px solid #ccc;
 }
- 
-#hd h1 {
+
+header h1 {
   font-size: 48px;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
 
-#hd h2 {
+header h2 {
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
-#bd,
-#ft {  margin-bottom: 2em }
+article,
+footer {  margin-bottom: 2em }
 
-#ft p {
+footer p {
   margin-bottom: 0;
   text-align: center;
 }
 
 /* //-- footer -- */
 
-#ft {
+footer {
   padding: 1em 0 5em 0;
   font-size: 92%;
   border-top: 1px solid #ccc;
@@ -188,9 +188,9 @@ p.enlarge {
 }
 
 .org p,
-.job p {  
+.job p {
   margin: 0.75em 0 3em 0;
-  font-size: 122%; 
+  font-size: 122%;
 }
 
 .last {  border: none }
@@ -287,13 +287,13 @@ noscript {
 
 @media screen and (max-width: 59.9em) {
   #inner {
-    padding: 5 5 5 5; 
+    padding: 5 5 5 5;
     margin: 0 auto;
     background: #f5f5f5;
     border: solid #666;
     border-width: 8px 0 2px 0;
-    box-shadow: 0 1px 3px #000;  
-  } 
+    box-shadow: 0 1px 3px #000;
+  }
   #hd h1 {
     font-size: 2.2em;
     font-weight: bold;
