@@ -204,9 +204,9 @@ var run = function() {
             var FIFTH_STEP = 150;
             var EXTRA_POINT_GAIN = 1;
 
-            var statusScore = data.public_repos * COEF_REPOS 
-                            + data.public_gists * COEF_GISTS 
-                            + data.followers * COEF_FOLLOWERS 
+            var statusScore = data.public_repos * COEF_REPOS
+                            + data.public_gists * COEF_GISTS
+                            + data.followers * COEF_FOLLOWERS
                             + data.following * COEF_FOLLOWING;
 
             // Extra points
@@ -300,7 +300,9 @@ var run = function() {
                     name: lang,
                     popularity: languages[lang],
                     toString: function() {
-                        return '<a href="https://github.com/trending?l=' + this.name + '">' + this.name + '</a>';
+                        return '<a href="https://github.com/search?q=user%3A'
+                            + username + '&l=' + this.name + '">'
+                            + this.name + '</a>';
                     }
                 });
 
