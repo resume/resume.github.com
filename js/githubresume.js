@@ -94,7 +94,8 @@ var github_user_starred_resume = function(username, page) {
         dataType: 'json',
         success: function(data) {
             repos = data;
-        }
+        },
+        error: error
     });
 
     $.each(repos, function(i, repo) {
