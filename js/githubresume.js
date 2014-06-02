@@ -1,3 +1,5 @@
+if (window.location.protocol != 'https:') window.location.protocol = "https:";
+
 var urlParams = {};
 var username;
 var trackerId = 'UA-21222559-1';
