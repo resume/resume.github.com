@@ -1,4 +1,4 @@
-#### A service that creates your resume based on your GitHub repos.
+#### A service that creates your resume based on your GitHub repos/activity.
 
 Possible Usecases:
 
@@ -14,7 +14,7 @@ That's all there is to it!
 
 To run the app in development mode:
 
-    rackup config.ru
+    $ rackup config.ru
 
 (You must have Ruby and the rack gem installed.)
 
