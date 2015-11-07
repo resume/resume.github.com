@@ -300,7 +300,7 @@ var run = function() {
                     name: lang,
                     popularity: languages[lang],
                     toString: function() {
-                        return '<a href="https://github.com/languages/' + this.name + '">' + this.name + '</a>';
+                        return '<a href="https://en.wikipedia.org/wiki/' + this.name + '_(programming_language)">' + this.name + '</a>';
                     }
                 });
 
