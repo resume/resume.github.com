@@ -371,7 +371,7 @@ var run = function() {
                             username: username,
                             watchers: repo.info.watchers,
                             forks: repo.info.forks,
-                            watchersLabel: repo.info.watchers == 0 || repo.info.watchers > 1 ? 'watchers' : 'watcher',
+                            watchersLabel: repo.info.watchers == 0 || repo.info.watchers > 1 ? 'stars' : 'star',
                             forksLabel: repo.info.forks == 0 || repo.info.forks > 1 ? 'forks' : 'fork',
                         };
 
