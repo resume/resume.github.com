@@ -13,7 +13,7 @@
     padding: 10pt;
     border: 0;
 }
-#hd {
+header {
     margin-top: 0;
 }
 
@@ -43,7 +43,7 @@
     page-break-inside: avoid;
 }
 
-#bd,
+article,
 #about {
     margin-bottom: 0;
 }
@@ -62,14 +62,14 @@ body {
     font-size: 10pt;
 }
 
-#hd h1 {
+header h1 {
     font-size: 28pt;
 }
-#hd h2 {
+header h2 {
     font-size: 14pt;
 }
 
-#bd h2,
+article h2,
 #profile .enlarge,
 #about .enlarge {
     font-size: 12pt;

@@ -7,7 +7,7 @@
 
 	<div id="inner" class="vcard">
 
-		<div id="hd">
+		<header>
 			<div class="yui-gc">
 				<div class="yui-u first">
 					<h1 class="fn">{{name}}</h1>
@@ -23,9 +23,9 @@
 					</div><!--// .contact-info -->
 				</div>
 			</div><!--// .yui-gc -->
-		</div><!--// hd -->
+		</header><!--// header -->
 
-		<div id="bd">
+		<article>
 			<div id="yui-main">
 				<div class="yui-b">
 
@@ -49,7 +49,7 @@
 							<h2>Website</h2>
 						</div>
 						<div class="yui-u" id="content-website">
-							<a href="{{website}}" id="mywebsite" title="{{name}}'s website">{{website}}</a>
+							<a href="{{website}}" title="{{name}}'s website">{{website}}</a>
 						</div>
 					</div>
 					{{/website}}
@@ -67,7 +67,7 @@
 						</div><!--// .yui-u -->
 
 						<div class="yui-u" id="jobs">
-                            <span>Loading information...</span><img src="images/loader.gif" />
+                            <span>Loading information...</span><img src="images/loader.gif" alt="avatar" />
 						</div><!--// .yui-u -->
 					</div><!--// .yui-gf -->
 
@@ -96,11 +96,11 @@
 					</div><!--// .yui-gf -->
 				</div><!--// .yui-b -->
 			</div><!--// yui-main -->
-		</div><!--// bd -->
+		</article><!--// article -->
 
-		<div id="ft">
+		<footer>
 			<p>{{name}} &mdash; {{#email}}<a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} {{#website}}<a href="{{website}}" title="{{name}}'s website">{{website}}</a> &mdash; {{/website}} <a href="https://github.com/{{username}}" title="GitHub profile" class="url">https://github.com/{{username}}</a></p>
-		</div><!--// footer -->
+		</footer><!--// footer -->
 
 	</div><!-- // inner -->
 
