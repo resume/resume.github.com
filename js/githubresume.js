@@ -185,12 +185,12 @@ var run = function() {
             since: since,
             resume_url: window.location
         };
-        
+
         // We consider a limit of 4 months since the GitHub opening (Feb 2008) to be considered as an early adopter
         if ((since == '2008' && sinceMonth <= 5) || since <= '2007') {
             view.earlyAdopter = 1;
         }
-		
+
         view.userStatus = getUserStatus();
         function getUserStatus() {
             var COEF_REPOS = 2;
@@ -203,22 +203,22 @@ var run = function() {
             var FOURTH_STEP = 50;
             var FIFTH_STEP = 150;
             var EXTRA_POINT_GAIN = 1;
-            
+
             var statusScore = data.public_repos * COEF_REPOS 
                             + data.public_gists * COEF_GISTS 
                             + data.followers * COEF_FOLLOWERS 
                             + data.following * COEF_FOLLOWING;
-            
+
             // Extra points
             // - Early adopter
             if (view.earlyAdopter == 1) {
                 statusScore += EXTRA_POINT_GAIN;
             }
             // - Blog & Email & Location
-        	  if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
-        	    statusScore += EXTRA_POINT_GAIN;
-        	  }
-			
+            if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
+              statusScore += EXTRA_POINT_GAIN;
+            }
+
             if (statusScore == FIRST_STEP) {
               return 'Inactive GitHub user';
             }
@@ -238,7 +238,7 @@ var run = function() {
               return 'Passionate GitHub user';
             }
         };
-		
+
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
             view.website = addHttp + data.blog;
         }
