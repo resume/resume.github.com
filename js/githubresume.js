@@ -301,8 +301,8 @@ var run = function() {
                     popularity: languages[lang],
                     toString: function() {
                         return '<a href="https://github.com/search?q=user%3A'
-                            + username + '&type=Repositories&ref=advsearch&l='
-                            + this.name + '">'+ this.name + '</a>';
+                            + username + '&l=' + this.name + '">'
+                            + this.name + '</a>';
                     }
                 });
 
