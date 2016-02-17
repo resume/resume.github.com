@@ -362,7 +362,7 @@ var run = function() {
                         if (since == until) {
                             date = since;
                         } else {
-                            date = since + ' - ' + until;
+                            date = since + ' &endash; ' + until;
                         }
 
                         view = {
