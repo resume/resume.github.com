@@ -1,7 +1,7 @@
 <div id="doc2" class="yui-t7">
   <div id="inner">
 
-    <div id="hd">
+    <header>
       <div class="yui-gc">
         <div class="yui-u first">
           <hgroup>
@@ -19,9 +19,9 @@
           </div><!--// .contact-info -->
         </div>
       </div><!--// .yui-gc -->
-    </div><!--// hd -->
+    </header>
 
-    <div id="bd">
+    <article>
       <div id="yui-main">
         <div class="yui-b">
 
@@ -31,11 +31,11 @@
             </div>
             <div class="yui-u">
               <p class="enlarge">
-                 We are a group of developers 
+                 We are a group of developers
                  {{#location}}
                  based in {{location}}
                  {{/location}}
-                 {{#repos}} 
+                 {{#repos}}
                  with <a href="https://github.com/{{{username}}}?tab=repositories">{{repos}} public {{reposLabel}}</a>
                  {{/repos}}
                  {{#followers}}&nbsp;and <a href="https://github.com/{{{username}}}/followers">{{followers}} {{followersLabel}}</a>{{/followers}}.
@@ -44,7 +44,7 @@
               <p id="languages" class="enlarge"></p>
             </div>
           </div><!--// .yui-gf -->
-          <div class="yui-gf" id="mylanguages"> 
+          <div class="yui-gf" id="mylanguages">
               <div class="yui-u first">
                   <h2>Languages</h2>
               </div>
@@ -77,11 +77,11 @@
           </div><!--// .yui-gf -->
         </div><!--// .yui-b -->
       </div><!--// yui-main -->
-    </div><!--// bd -->
+    </article>
 
-    <div id="ft">
+    <footer>
       <p>{{name}} &mdash; {{#email}}<a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} <a href="https://github.com/{{username}}" title="Github profile">https://github.com/{{username}}</a></p>
-    </div><!--// footer -->
+    </footer>
 
   </div><!-- // inner -->
 
