@@ -87,6 +87,7 @@ var github_user_starred_resume = function(username, page) {
     var repos = [];
     var page  = (page ? page : 1);
     var url   = 'https://api.github.com/users/' + username + '/starred?page=' + page;
+    var errorMsg;
 
     $.ajax({
         url: url,
@@ -94,8 +95,19 @@ var github_user_starred_resume = function(username, page) {
         dataType: 'json',
         success: function(data) {
             repos = data;
+        },
+        error: function(e) {
+            if (e.status == 403) {
+                errorMsg = 'api_limit'
+            } else if (e.status == 404) {
+                errorMsg = 'not_found'
+            }
         }
     });
+
+    if (errorMsg === 'api_limit' || errorMsg === 'not_found') {
+        return errorMsg;
+    }
 
     $.each(repos, function(i, repo) {
         if (repo.full_name == "resume/resume.github.com") {
@@ -118,17 +130,38 @@ var github_user_starred_resume = function(username, page) {
 var run = function() {
     var itemCount = 0,
         maxItems = 5,
-        maxLanguages = 9;
+        maxLanguages = 9,
+        starred = github_user_starred_resume(username);
 
-    if (! github_user_starred_resume(username)) {
-        $.ajax({
-            url: 'views/opt_out.html',
-            dataType: 'html',
-            success: function(data) {
-                var template = data;
-                $('#resume').html(data);
-            }
-        });
+    if (! starred || starred === 'api_limit' || starred === 'not_found') {
+        if (starred === 'api_limit') {
+            $.ajax({
+                url: 'views/api_limit.html',
+                dataType: 'html',
+                success: function(data) {
+                    var template = data;
+                    $('#resume').html(data);
+                }
+            });
+        } else if (starred === 'not_found') {
+            $.ajax({
+                url: 'views/not_found.html',
+                dataType: 'html',
+                success: function(data) {
+                    var template = data;
+                    $('#resume').html(data);
+                }
+            });
+        } else {
+            $.ajax({
+                url: 'views/opt_out.html',
+                dataType: 'html',
+                success: function(data) {
+                    var template = data;
+                    $('#resume').html(data);
+                }
+            });
+        }
         return;
     }
 
