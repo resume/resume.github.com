@@ -403,6 +403,7 @@ var run = function() {
                             date: date,
                             language: repo.info.language,
                             description: repo.info.description,
+                            homepage: repo.info.homepage,
                             username: username,
                             watchers: repo.info.watchers,
                             forks: repo.info.forks,
