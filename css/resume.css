@@ -285,6 +285,10 @@ noscript {
 
 #doc2 {  padding-bottom: 70px }
 
+.contributions {
+  padding-bottom: 10px;
+}
+
 @media screen and (max-width: 59.9em) {
   #inner {
     padding: 5 5 5 5;

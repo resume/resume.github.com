@@ -63,12 +63,31 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
-      url += '&page=' + page_number;
+        url += '&page=' + page_number;
     }
     $.getJSON(url, function(repos) {
         data = data.concat(repos.data);
         if (repos.data.length == 500) {
             github_user_repos(username, callback, page + 1, data);
+        } else {
+            callback(data);
+        }
+    });
+}
+
+var github_user_issues = function(username, callback, page_number, prev_data) {
+    var page = (page_number ? page_number : 1),
+        url = 'https://api.github.com/search/issues?q=type:pr+is:merged+author:' + username + '&per_page=500&callback=?'
+        data = (prev_data ? prev_data : []);
+
+    if (page_number > 1) {
+        url += '&page=' + page_number;
+    }
+
+    $.getJSON(url, function(repos) {
+        data = data.concat(repos.data.items);
+        if (repos.data.total_count == 500) {
+            github_user_issues(username, callback, page + 1, data);
         } else {
             callback(data);
         }
@@ -133,7 +152,7 @@ var run = function() {
         maxLanguages = 9,
         starred = github_user_starred_resume(username);
 
-    if (! starred || starred === 'api_limit' || starred === 'not_found') {
+    if (!starred || starred === 'api_limit' || starred === 'not_found') {
         if (starred === 'api_limit') {
             $.ajax({
                 url: 'views/api_limit.html',
@@ -427,6 +446,59 @@ var run = function() {
                     } else {
                       $('#jobs').html('').append('<p class="enlarge">Unfortunately, this user does not seem to have any <strong>public</strong> repositories.</p>');
                     }
+                }
+            }
+        });
+    });
+
+    github_user_issues(username, function(data) {
+        var sorted = [],
+            repos = {};
+
+        $.each(data, function(i, issue) {
+            if(repos[issue.repository_url] === undefined) {
+                repos[issue.repository_url] = { popularity: 1 }
+            } else {
+                repos[issue.repository_url].popularity += 1;
+            }
+        });
+
+        $.each(repos, function(repo, obj) {
+            sorted.push({ repo: repo, popularity: obj.popularity});
+        })
+
+        function sortByPopularity(a, b) {
+            return b.popularity - a.popularity;
+        };
+
+        sorted.sort(sortByPopularity);
+
+        $.ajax({
+            url: 'views/contrib.html',
+            dataType: 'html',
+            success: function(response) {
+                if (sorted.length > 0) {
+                    $('#contrib-jobs').html('');
+                    var view, template, html, repoUrl, repoName, commitsUrl;
+                    $.each(sorted, function(index, repo) {
+                        repoUrl = repo.repo.replace(/https:\/\/api\.github\.com\/repos/, 'https://github.com');
+                        repoName = repo.repo.replace(/https:\/\/api\.github\.com\/repos\//, '');
+                        commitsUrl = repoUrl + '/commits?author=' + username;
+                        view = {
+                            count: repo.popularity,
+                            username: username,
+                            repoUrl: repoUrl,
+                            repoName: repoName,
+                            commitsUrl: commitsUrl
+                        };
+
+                        template = response;
+                        html = Mustache.to_html(template, view);
+
+                        $('#contrib-jobs').append($(html));
+                    });
+                } else {
+                    $('#contributions').remove();
                 }
             }
         });
