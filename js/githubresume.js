@@ -59,7 +59,7 @@ var github_user = function(username, callback) {
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/users/' + username + '/repos?per_page=500&callback=?',
+        url = 'https://api.github.com/users/' + username + '/repos?per_page=100&callback=?',
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
@@ -67,7 +67,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
     }
     $.getJSON(url, function(repos) {
         data = data.concat(repos.data);
-        if (repos.data.length == 500) {
+        if (repos.data.length == 100) {
             github_user_repos(username, callback, page + 1, data);
         } else {
             callback(data);
@@ -77,7 +77,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
 
 var github_user_issues = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/search/issues?q=type:pr+is:merged+author:' + username + '&per_page=500&callback=?'
+        url = 'https://api.github.com/search/issues?q=type:pr+is:merged+author:' + username + '&per_page=100&callback=?'
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
@@ -86,7 +86,7 @@ var github_user_issues = function(username, callback, page_number, prev_data) {
 
     $.getJSON(url, function(repos) {
         data = data.concat(repos.data.items);
-        if (repos.data.total_count == 500) {
+        if (repos.data.total_count == 100) {
             github_user_issues(username, callback, page + 1, data);
         } else {
             callback(data);
@@ -105,7 +105,7 @@ var github_user_starred_resume = function(username, page) {
     var star  = false;
     var repos = [];
     var page  = (page ? page : 1);
-    var url   = 'https://api.github.com/users/' + username + '/starred?per_page=500&page=' + page;
+    var url   = 'https://api.github.com/users/' + username + '/starred?per_page=100&page=' + page;
     var errorMsg;
 
     $.ajax({
@@ -139,7 +139,7 @@ var github_user_starred_resume = function(username, page) {
         return star;
     }
 
-    if (repos.length == 500) {
+    if (repos.length == 100) {
         star = github_user_starred_resume(username, page + 1);
     }
 
