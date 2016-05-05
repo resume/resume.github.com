@@ -55,7 +55,7 @@ var home = function() {
 
 var github_user = function(username, callback) {
     $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
-}
+};
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
@@ -73,11 +73,11 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
             callback(data);
         }
     });
-}
+};
 
 var github_user_issues = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/search/issues?q=type:pr+is:merged+author:' + username + '&per_page=100&callback=?'
+        url = 'https://api.github.com/search/issues?q=type:pr+is:merged+author:' + username + '&per_page=100&callback=?';
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
@@ -92,11 +92,11 @@ var github_user_issues = function(username, callback, page_number, prev_data) {
             callback(data);
         }
     });
-}
+};
 
 var github_user_orgs = function(username, callback) {
     $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
-}
+};
 
 // Check to see if the user has starred the resume.github.com repo.
 //
@@ -104,7 +104,7 @@ var github_user_orgs = function(username, callback) {
 var github_user_starred_resume = function(username, page) {
     var star  = false;
     var repos = [];
-    var page  = (page ? page : 1);
+    page  = (page ? page : 1);
     var url   = 'https://api.github.com/users/' + username + '/starred?per_page=100&page=' + page;
     var errorMsg;
 
@@ -117,9 +117,9 @@ var github_user_starred_resume = function(username, page) {
         },
         error: function(e) {
             if (e.status == 403) {
-                errorMsg = 'api_limit'
+                errorMsg = 'api_limit';
             } else if (e.status == 404) {
-                errorMsg = 'not_found'
+                errorMsg = 'not_found';
             }
         }
     });
@@ -144,7 +144,7 @@ var github_user_starred_resume = function(username, page) {
     }
 
     return star;
-}
+};
 
 var run = function() {
     var itemCount = 0,
@@ -189,8 +189,7 @@ var run = function() {
         var sinceDate = new Date(data.created_at);
         var sinceMonth = sinceDate.getMonth();
         var since = sinceDate.getFullYear();
-        var sinceMonth = sinceDate.getMonth();
-        var currentYear = (new Date).getFullYear();
+        var currentYear = (new Date()).getFullYear();
         switch (since) {
           case currentYear-1:
             since = 'last year';
@@ -267,7 +266,7 @@ var run = function() {
                 statusScore += EXTRA_POINT_GAIN;
             }
             // - Blog & Email & Location
-            if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
+            if (view.location && view.location !== '' && view.email && view.email !== '' && data.blog && data.blog !== '') {
               statusScore += EXTRA_POINT_GAIN;
             }
 
@@ -289,7 +288,7 @@ var run = function() {
             else if (statusScore > FIFTH_STEP) {
               return 'Passionate GitHub user';
             }
-        };
+        }
 
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
             view.website = addHttp + data.blog;
@@ -336,7 +335,7 @@ var run = function() {
 
         function sortByPopularity(a, b) {
             return b.popularity - a.popularity;
-        };
+        }
 
         sorted.sort(sortByPopularity);
 
@@ -383,7 +382,7 @@ var run = function() {
                         percent = parseInt((lang.popularity / languageTotal) * 100);
                         li = $('<li>' + lang.toString() + ' ('+percent+'%)</li>');
 
-                        if (x % 3 == 0 || (languages.length < 3 && i == languages.length - 1)) {
+                        if (x % 3 === 0 || (languages.length < 3 && i == languages.length - 1)) {
                             li.attr('class', 'last');
                             ul.append(li);
                             $('#content-languages').append(ul);
@@ -426,8 +425,8 @@ var run = function() {
                             username: username,
                             watchers: repo.info.watchers,
                             forks: repo.info.forks,
-                            watchersLabel: repo.info.watchers == 0 || repo.info.watchers > 1 ? 'stars' : 'star',
-                            forksLabel: repo.info.forks == 0 || repo.info.forks > 1 ? 'forks' : 'fork',
+                            watchersLabel: repo.info.watchers === 0 || repo.info.watchers > 1 ? 'stars' : 'star',
+                            forksLabel: repo.info.forks === 0 || repo.info.forks > 1 ? 'forks' : 'fork',
                         };
 
                         if (itemCount == sorted.length - 1 || itemCount == maxItems - 1) {
@@ -457,7 +456,7 @@ var run = function() {
 
         $.each(data, function(i, issue) {
             if(repos[issue.repository_url] === undefined) {
-                repos[issue.repository_url] = { popularity: 1 }
+                repos[issue.repository_url] = { popularity: 1 };
             } else {
                 repos[issue.repository_url].popularity += 1;
             }
@@ -465,11 +464,11 @@ var run = function() {
 
         $.each(repos, function(repo, obj) {
             sorted.push({ repo: repo, popularity: obj.popularity});
-        })
+        });
 
         function sortByPopularity(a, b) {
             return b.popularity - a.popularity;
-        };
+        }
 
         sorted.sort(sortByPopularity);
 
