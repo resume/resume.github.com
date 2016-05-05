@@ -478,25 +478,24 @@ var run = function() {
             success: function(response) {
                 if (sorted.length > 0) {
                     $('#contrib-jobs').html('');
-                    var view, template, html, repoUrl, repoName, commitsUrl;
+                    var template, html, repoUrl, repoName, commitsUrl;
                     $.each(sorted, function(index, repo) {
                         repoUrl = repo.repo.replace(/https:\/\/api\.github\.com\/repos/, 'https://github.com');
                         repoName = repo.repo.replace(/https:\/\/api\.github\.com\/repos\//, '');
                         commitsUrl = repoUrl + '/commits?author=' + username;
+                        var view = {
+                            count: 0,
+                            username: username,
+                            repoUrl: repoUrl,
+                            repoName: repoName,
+                            commitsUrl: commitsUrl
+                        };
                         $.get('https://api.github.com/repos/' + repoName + '/stats/contributors', function(contributors) {
-                            var commitCount = 0;
                             for (var i = 0; i < contributors.length; i++) {
-                                if (contributors[i].author.login == username) {
-                                    commitCount = contributors[i].total;
+                                if (contributors[i].author.login == view.username) {
+                                    view.count = contributors[i].total;
                                 }
                             }
-                            view = {
-                                count: commitCount,
-                                username: username,
-                                repoUrl: repoUrl,
-                                repoName: repoName,
-                                commitsUrl: commitsUrl
-                            };
 
                             template = response;
                             html = Mustache.to_html(template, view);
