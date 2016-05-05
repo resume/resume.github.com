@@ -416,7 +416,10 @@ var run = function() {
                         } else {
                             date = since + ' &ndash; ' + until;
                         }
-
+                        var emojiPattern = /:([a-z0-9_\+\-]+):/g;
+                        // no, it's not really a pattern
+                        var imagePattern = "<img width='20' height='20' src='https://assets-cdn.github.com/images/icons/emoji/$1.png' />";
+                        repo.info.description = repo.info.description.replace(emojiPattern, imagePattern);
                         view = {
                             name: repo.info.name,
                             date: date,
