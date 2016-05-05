@@ -483,18 +483,25 @@ var run = function() {
                         repoUrl = repo.repo.replace(/https:\/\/api\.github\.com\/repos/, 'https://github.com');
                         repoName = repo.repo.replace(/https:\/\/api\.github\.com\/repos\//, '');
                         commitsUrl = repoUrl + '/commits?author=' + username;
-                        view = {
-                            count: repo.popularity,
-                            username: username,
-                            repoUrl: repoUrl,
-                            repoName: repoName,
-                            commitsUrl: commitsUrl
-                        };
+                        $.get('https://api.github.com/repos/' + repoName + '/stats/contributors', function(contributors) {
+                            var commitCount = 0;
+                            for (var i = 0; i < contributors.length; i++) {
+                                if (contributors[i].author.login == username) {
+                                    commitCount = contributors[i].total;
+                                }
+                            }
+                            view = {
+                                count: commitCount,
+                                username: username,
+                                repoUrl: repoUrl,
+                                repoName: repoName,
+                                commitsUrl: commitsUrl
+                            };
 
-                        template = response;
-                        html = Mustache.to_html(template, view);
-
-                        $('#contrib-jobs').append($(html));
+                            template = response;
+                            html = Mustache.to_html(template, view);
+                            $('#contrib-jobs').append($(html));
+                        });
                     });
                 } else {
                     $('#contributions').remove();
