@@ -420,7 +420,7 @@ var run = function() {
                         // no, it's not really a pattern
                         var imagePattern = "<img width='20' height='20' src='https://assets-cdn.github.com/images/icons/emoji/$1.png' />";
                         var description = repo.info.description;
-                        repo.info.description = description ? description.replace(emojiPattern, imagePattern): description;
+                        repo.info.description = description ? description.replace(emojiPattern, imagePattern) : description;
                         view = {
                             name: repo.info.name,
                             date: date,
