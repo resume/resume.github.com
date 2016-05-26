@@ -419,7 +419,8 @@ var run = function() {
                         var emojiPattern = /:([a-z0-9_\+\-]+):/g;
                         // no, it's not really a pattern
                         var imagePattern = "<img width='20' height='20' src='https://assets-cdn.github.com/images/icons/emoji/$1.png' />";
-                        repo.info.description = repo.info.description.replace(emojiPattern, imagePattern);
+                        var description = repo.info.description;
+                        repo.info.description = description ? description.replace(emojiPattern, imagePattern): description;
                         view = {
                             name: repo.info.name,
                             date: date,
