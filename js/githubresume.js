@@ -353,7 +353,7 @@ var run = function() {
                     popularity: languages[lang],
                     toString: function() {
                         return '<a href="https://github.com/search?q=user%3A'
-                            + username + '&l=' + this.name + '">'
+                            + username + '&l=' + encodeURIComponent(this.name) + '">'
                             + this.name + '</a>';
                     }
                 });
