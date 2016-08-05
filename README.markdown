@@ -1,23 +1,15 @@
-#### A service that creates your resume based on your GitHub repos/activity.
+# [GitHub Résumé](https://resume.github.io/)
 
-Possible Use Cases:
+**A service that creates a résumé based on your GitHub repos/activity.**
 
- * Boon for all the tech-savy bosses who want to have a **quick view** of person's git/github activity, _before the interview_
+GitHub Résumé is **opt-in**. To make your resume visible, just **star** [this project](https://github.com/resume/resume.github.com). To view your résumé, go to `https://resume.github.io/?yourusername` or follow the instructions on the [home page](https://resume.github.io/).
 
-### Opt-In
+Great for all the tech-savy bosses who want to have a **quick view** of person's git/github activity, _before the interview_.
 
-GitHub Resume is now opt-in rather than opt-out! To make your resume visible
-just **star** this project, [resume/resume.github.com](https://github.com/resume/resume.github.com).
-That's all there is to it!
-
-### For Developers
+### Development
 
 To run the app in development mode:
 
     $ rackup config.ru
 
 (You must have Ruby and the rack gem installed.)
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/resume/resume.github.com/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
