@@ -7,7 +7,7 @@ var trackerId = 'UA-21222559-1';
         a = /\+/g,  // Regex for replacing addition symbol with a space
         r = /([^&=]+)=?([^&]*)/g,
         d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
-        q = window.location.search.substring(1);
+        q = window.location.search.substring(1).split("/")[0];
 
     while (e = r.exec(q)) {
        urlParams[0] = d(e[1]);
