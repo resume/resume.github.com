@@ -213,11 +213,8 @@ var run = function() {
             name = data.name;
         }
 
-        var avatar = '';
-        if (data.type == 'Organization'){
-            avatar = data.avatar_url.match(/https:\/\/secure.gravatar.com\/avatar\/[0-9a-z]+/)[0];
-            avatar += '?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png';
-        }
+        var avatar = data.avatar_url.match(/https:\/\/avatars.githubusercontent.com\/u\/[0-9a-z]+/)[0];
+        avatar += '?s=140&d=https://github.com/images/gravatars/gravatar-140.png';
 
         var view = {
             name: name,
