@@ -315,9 +315,14 @@ var run = function() {
     github_user_repos(username, function(data) {
         var sorted = [],
             languages = {},
+			optedIn = false,
             popularity;
 
+			
         $.each(data, function(i, repo) {
+			if (repo.name == 'github.resume.opt_in') {
+				optedIn = true;
+			}
             if (repo.fork !== false) {
                 return;
             }
@@ -333,7 +338,9 @@ var run = function() {
             popularity = repo.watchers + repo.forks;
             sorted.push({position: i, popularity: popularity, info: repo});
         });
-
+		if (!optedIn)
+			throw 'User has not opted in to this service.';
+			
         function sortByPopularity(a, b) {
             return b.popularity - a.popularity;
         };
