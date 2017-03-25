@@ -201,7 +201,7 @@ var run = function() {
         }
 
         var addHttp = '';
-        if (data.blog && data.blog.indexOf('http') < 0) {
+        if (data.blog && data.blog.indexOf('http') > 0) {
             addHttp = 'http://';
         }
 
