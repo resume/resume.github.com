@@ -59,7 +59,7 @@ var github_user = function(username, callback) {
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/users/' + username + '/repos?per_page=100&callback=?',
+        url = 'https://api.github.com/users/' + username + '/repos?type=all&per_page=100&callback=?',
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
