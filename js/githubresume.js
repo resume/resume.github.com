@@ -1,5 +1,6 @@
 var urlParams = {};
 var username;
+var userAPIUrl;
 var trackerId = 'UA-21222559-1';
 
 (function () {
@@ -18,6 +19,7 @@ $(document).ready(function() {
     try {
         if (urlParams[0] !== undefined) {
             username = urlParams[0];
+            userAPIUrl = 'https://api.github.com/users/' + username;
             run();
         } else {
             home();
@@ -53,13 +55,13 @@ var home = function() {
     });
 };
 
-var github_user = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '?callback=?', callback);
+var github_user = function(callback) {
+    $.getJSON(userAPIUrl + '?callback=?', callback);
 }
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
-        url = 'https://api.github.com/users/' + username + '/repos?per_page=100&callback=?',
+        url = userAPIUrl + '/repos?per_page=100&callback=?',
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
@@ -94,8 +96,8 @@ var github_user_issues = function(username, callback, page_number, prev_data) {
     });
 }
 
-var github_user_orgs = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '/orgs?callback=?', callback);
+var github_user_orgs = function(callback) {
+    $.getJSON(userAPIUrl + '/orgs?callback=?', callback);
 }
 
 // Check to see if the user has starred the resume.github.com repo.
@@ -105,7 +107,7 @@ var github_user_starred_resume = function(username, page) {
     var star  = false;
     var repos = [];
     var page  = (page ? page : 1);
-    var url   = 'https://api.github.com/users/' + username + '/starred?per_page=100&page=' + page;
+    var url   = userAPIUrl + '/starred?per_page=100&page=' + page;
     var errorMsg;
 
     $.ajax({
@@ -158,7 +160,6 @@ var run = function() {
                 url: 'views/api_limit.html',
                 dataType: 'html',
                 success: function(data) {
-                    var template = data;
                     $('#resume').html(data);
                 }
             });
@@ -167,7 +168,6 @@ var run = function() {
                 url: 'views/not_found.html',
                 dataType: 'html',
                 success: function(data) {
-                    var template = data;
                     $('#resume').html(data);
                 }
             });
@@ -176,7 +176,6 @@ var run = function() {
                 url: 'views/opt_out.html',
                 dataType: 'html',
                 success: function(data) {
-                    var template = data;
                     $('#resume').html(data);
                 }
             });
