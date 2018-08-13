@@ -20,7 +20,6 @@ $(document).ready(function() {
         if (urlParams[0] !== undefined) {
             username = urlParams[0];
             userAPIUrl = 'https://api.github.com/users/' + username;
-            console.log(userAPIUrl);
             run();
         } else {
             home();
@@ -112,22 +111,19 @@ var github_user_starred_resume = function(username, page) {
     var errorMsg;
 
     $.ajax({
-        url: url,
-        headers: {
-            Authorization: "Basic f3b39df3513c0d7bb3f0c1e7577d55b4dcb36d8b"
-        },
-        async: false,
-        dataType: 'json',
-        success: function(data) {
-            repos = data;
-        },
-        error: function(e) {
-            if (e.status === 403) {
-                errorMsg = 'api_limit'
-            } else if (e.status === 404) {
-                errorMsg = 'not_found'
-            }
+      url: url,
+      async: false,
+      dataType: "json",
+      success: function(data) {
+        repos = data;
+      },
+      error: function(e) {
+        if (e.status === 403) {
+          errorMsg = "api_limit";
+        } else if (e.status === 404) {
+          errorMsg = "not_found";
         }
+      }
     });
 
     if (errorMsg === 'api_limit' || errorMsg === 'not_found') {
@@ -220,11 +216,14 @@ var run = function() {
         if (data.type === 'Organization'){
             avatar = data.avatar_url.match(/https:\/\/secure.gravatar.com\/avatar\/[0-9a-z]+/)[0];
             avatar += '?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png';
+        }else if(data.type === 'User'){
+            avatar = data.avatar_url;
         }
 
         var view = {
             name: name,
             type: data.type,
+            company: data.company,
             email: data.email,
             created_at: data.created_at,
             earlyAdopter: 0,
@@ -240,7 +239,6 @@ var run = function() {
             since: since,
             resume_url: window.location
         };
-
         // We consider a limit of 4 months since the GitHub opening (Feb 2008) to be considered as an early adopter
         if ((since == '2008' && sinceMonth <= 5) || since <= '2007') {
             view.earlyAdopter = 1;
