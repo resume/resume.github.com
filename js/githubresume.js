@@ -55,7 +55,7 @@ var home = function() {
 
 var github_user = function(callback) {
     $.getJSON(userAPIUrl + '?callback=?', callback);
-}
+};
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
@@ -73,7 +73,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
             callback(data);
         }
     });
-}
+};
 
 var github_user_issues = function(username, callback, page_number, prev_data) {
     var page = (page_number ? page_number : 1),
@@ -82,7 +82,7 @@ var github_user_issues = function(username, callback, page_number, prev_data) {
 
     if (page_number > 1) {
         url += '&page=' + page_number;
-    }
+    };
 
     $.getJSON(url, function(repos) {
         data = data.concat(repos.data.items);
@@ -92,12 +92,11 @@ var github_user_issues = function(username, callback, page_number, prev_data) {
             callback(data);
         }
     });
-}
+};
 
 var github_user_orgs = function(callback) {
     $.getJSON(userAPIUrl + '/orgs?callback=?', callback);
-}
-
+};
 /**
  * Check to see if the user has starred the resume.github.com repo.
  * Returns true / false.
@@ -128,7 +127,7 @@ var github_user_starred_resume = function(username, page) {
 
     if (errorMsg === 'api_limit' || errorMsg === 'not_found') {
         return errorMsg;
-    }
+    };
 
     $.each(repos, function(i, repo) {
         if (repo.full_name === 'resume/resume.github.com') {
@@ -146,7 +145,7 @@ var github_user_starred_resume = function(username, page) {
     }
 
     return star;
-}
+};
 
 var run = function() {
     var itemCount = 0,
@@ -181,7 +180,7 @@ var run = function() {
             });
         }
         return;
-    }
+    };
 
     var result = github_user(function(data) {
         data = data.data;
@@ -197,12 +196,12 @@ var run = function() {
           case currentYear:
             since = 'this year';
             break;
-        }
+        };
 
         var addHttp = '';
         if (data.blog && data.blog.indexOf('http') < 0) {
             addHttp = 'http://';
-        }
+        };
 
         // set view.name to the "friendly" name e.g. "John Doe". If not defined
         // (in which case data.name is empty), fall back to the login
@@ -210,7 +209,7 @@ var run = function() {
         var name = username;
         if (data.name !== null && data.name !== undefined && data.name.length) {
             name = data.name;
-        }
+        };
 
         var avatar = '';
         if (data.type === 'Organization'){
@@ -218,7 +217,7 @@ var run = function() {
             avatar += '?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png';
         }else if(data.type === 'User'){
             avatar = data.avatar_url;
-        }
+        };
 
         var view = {
             name: name,
@@ -242,7 +241,7 @@ var run = function() {
         // We consider a limit of 4 months since the GitHub opening (Feb 2008) to be considered as an early adopter
         if ((since == '2008' && sinceMonth <= 5) || since <= '2007') {
             view.earlyAdopter = 1;
-        }
+        };
 
         view.userStatus = getUserStatus();
         function getUserStatus() {
@@ -266,11 +265,11 @@ var run = function() {
             // - Early adopter
             if (view.earlyAdopter === 1) {
                 statusScore += EXTRA_POINT_GAIN;
-            }
+            };
             // - Blog & Email & Location
             if (view.location && view.location != '' && view.email && view.email != '' && data.blog && data.blog != '') {
               statusScore += EXTRA_POINT_GAIN;
-            }
+            };
 
             if (statusScore === FIRST_STEP) {
               return 'Inactive GitHub user';
@@ -294,9 +293,15 @@ var run = function() {
 
         if (data.blog !== undefined && data.blog !== null && data.blog !== '') {
             view.website = addHttp + data.blog;
-        }
+        };
 
-        var resume = (data.type === 'User' ? 'views/resume.html' : 'views/resumeOrgs.html');
+        if (typeof(data.type) !== 'undefined') {
+            var resume = (data.type === 'User' ? 'views/resume.html' : 'views/resumeOrgs.html');
+        }
+        else{
+            return false;
+        };
+
         $.ajax({
             url: resume,
             dataType: 'html',
@@ -321,15 +326,15 @@ var run = function() {
         $.each(data, function(i, repo) {
             if (repo.fork !== false) {
                 return;
-            }
+            };
 
             if (repo.language) {
                 if (repo.language in languages) {
                     languages[repo.language]++;
                 } else {
                     languages[repo.language] = 1;
-                }
-            }
+                };
+            };
 
             popularity = repo.watchers + repo.forks;
             sorted.push({position: i, popularity: popularity, info: repo});
@@ -360,14 +365,14 @@ var run = function() {
                 });
 
                 languageTotal += languages[lang];
-            }
+            };
 
             if (limit) {
                 sorted_languages = sorted_languages.slice(0, limit);
-            }
+            };
 
             return sorted_languages.sort(sortByPopularity);
-        }
+        };
 
         $.ajax({
             url: 'views/job.html',
@@ -470,7 +475,7 @@ var run = function() {
 
         $.each(repos, function(repo, obj) {
             sorted.push({ repo: repo, popularity: obj.popularity});
-        })
+        });
 
         function sortByPopularity(a, b) {
             return b.popularity - a.popularity;
