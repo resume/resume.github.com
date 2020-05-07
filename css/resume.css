@@ -103,7 +103,7 @@ p {
   line-height: 18px;
 }
 
-a {  color: #990003 }
+a {  color: #360099 }
 
 a:hover {  text-decoration: none }
 
@@ -259,7 +259,7 @@ noscript {
   display: block;
   margin-top: 30px;
   font-size: 152%;
-  color: #990003;
+  color: #0a0099;
 }
 
 #actions {
