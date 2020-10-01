@@ -1,4 +1,4 @@
-# [GitHub Résumé](https://resume.github.io/)
+# [GitHub Resume](https://resume.github.io/)
 
 **A service that creates a résumé based on your GitHub repos/activity.**
 
