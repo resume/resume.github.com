@@ -16,10 +16,8 @@
 
         <div class="yui-u">
           <div class="contact-info">
-            {{#gravatar_id}}
-            <img src="https://secure.gravatar.com/avatar/{{gravatar_id}}?s=140&amp;d=https://github.com/images/gravatars/gravatar-140.png" alt="avatar" class="photo" />
-            {{/gravatar_id}}
-            {{#email}}<h3><a href="mailto:{{email}}" class="email">{{email}}</a></h3>{{/email}}
+            <img src="{{avatar_url}}" alt="avatar" class="photo" />
+            {{email}}<h3><a href="mailto:{{email}}" class="email">{{email}}</a></h3>
           </div><!--// .contact-info -->
         </div>
       </div><!--// .yui-gc -->
@@ -108,7 +106,13 @@
     </article>
 
     <footer>
-      <p>{{name}} &mdash; {{#email}}<a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} {{#website}}<a href="{{website}}" title="{{name}}'s website">{{website}}</a> &mdash; {{/website}} <a href="https://github.com/{{username}}" title="GitHub profile" class="url">https://github.com/{{username}}</a></p>
+<p>{{name}} &mdash; {{#email}}
+  <a href="mailto:{{email}}">{{email}}</a> &mdash; {{/email}} {{#website}}
+  <a href="{{website}}" title="{{name}}'s website">{{website}}</a> &mdash; {{/website}}
+  <a href="https://github.com/{{username}}" title="GitHub profile" class="url">https://github.com/{{username}}</a>
+  &mdash;
+  <span class="url">{{company}}</span>
+</p>
     </footer>
 
   </div><!-- // inner -->
